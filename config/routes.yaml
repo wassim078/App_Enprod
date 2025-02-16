@@ -2,4 +2,16 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
-    type: attribute
+    type: attribute    
+app_tempaltefrontoffice:
+    path: /templatefrontoffice/{page}
+    controller: App\Controller\UserTemplatefrontofficeController::index
+    defaults:
+        page: index
+app_templatebackoffice:
+    path: /templatebackoffice/{page}
+    controller: App\Controller\TemplatebackofficeController::index
+    defaults:
+        page: index
+app_login_check:
+    path: /api/login      
