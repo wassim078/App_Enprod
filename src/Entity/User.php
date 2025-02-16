@@ -39,6 +39,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $telephone = null;
 
+    
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 

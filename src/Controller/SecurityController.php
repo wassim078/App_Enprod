@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
@@ -25,8 +25,14 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    public function logout(): Response
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        $response = new RedirectResponse($this->generateUrl('app_templatefrontoffice'));
+
+        // Clear the JWT token cookie
+        $response->headers->clearCookie('jwt_token', '/', null, false, true);
+
+        // Symfony's firewall will handle the rest of the logout process
+        return $response;
     }
 }
