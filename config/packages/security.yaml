@@ -67,7 +67,11 @@ security:
 
         - { path: ^/api/login, roles: PUBLIC_ACCESS } # Allow access to the login endpoint
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/templatefrontoffice, roles: [ROLE_CLIENT, ROLE_LIVREUR, ROLE_ENTREPRISE] } #
+        - { path: ^/templatefrontoffice/collect, roles: [ROLE_CLIENT, ROLE_LIVREUR, ROLE_ENTREPRISE] }
+        - { path: ^/templatefrontoffice/annonce, roles: [ROLE_CLIENT, ROLE_LIVREUR, ROLE_ENTREPRISE] } 
+        - { path: ^/templatefrontoffice/forum, roles: [ROLE_CLIENT, ROLE_LIVREUR, ROLE_ENTREPRISE] }
+        - { path: ^/templatefrontoffice/reclamation, roles: [ROLE_CLIENT, ROLE_LIVREUR, ROLE_ENTREPRISE] } 
+        - { path: ^/templatefrontoffice, roles: PUBLIC_ACCESS  }   #
         - { path: ^/login, roles: PUBLIC_ACCESS } # Allow everyone to access the login page
         - { path: ^/register, roles: PUBLIC_ACCESS } # Allow everyone to access the registration page
         - { path: ^/templatebackoffice, roles: ROLE_ADMIN} # Only admins can access the dashboard
