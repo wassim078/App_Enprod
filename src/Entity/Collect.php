@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\CollectRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,26 +12,56 @@ class Collect
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "The title is required.")]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: "The title must be at least {{ limit }} characters long.",
+        maxMessage: "The title cannot be longer than {{ limit }} characters."
+    )]
+    private string $titre;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nomProduit = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "The product name is required.")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "The product name must be at least {{ limit }} characters long.",
+        maxMessage: "The product name cannot be longer than {{ limit }} characters."
+    )]
+    private string $nomProduit;
 
-    #[ORM\Column]
-    private ?float $quantite = null;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank(message: "The quantity is required.")]
+    #[Assert\Positive(message: "The quantity must be a positive number.")]
+    private int $quantite;
 
-    #[ORM\Column(length: 255)]
-    private ?string $lieu = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "The location is required.")]
+    #[Assert\Length(
+        min: 5,
+        max: 255,
+        minMessage: "The location must be at least {{ limit }} characters long.",
+        maxMessage: "The location cannot be longer than {{ limit }} characters."
+    )]
+    private string $lieu;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDebut = null;
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank(message: "The date is required.")]
+    #[Assert\GreaterThan("today", message: "The date must be in the future.")]
+    private \DateTimeInterface $dateDebut;
 
-    #[ORM\ManyToOne(inversedBy: 'collects')]
+
+    #[ORM\ManyToOne(targetEntity: CategorieCollect::class, inversedBy: 'collects')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?CategorieCollect $categorieCollect = null;
+    
+
+    
 
     public function getId(): ?int
     {
