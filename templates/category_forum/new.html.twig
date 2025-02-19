@@ -1,0 +1,97 @@
+{% extends 'templatebackoffice/index.html.twig' %}
+
+{% block title %}New CategorieForum{% endblock %}
+
+{% block body %}
+
+    <style>
+        /* Styles de base */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Titre */
+        .title {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Formulaire */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Bouton de soumission */
+        .btn-submit {
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #0056b3, #0084d1);
+        }
+
+        /* Lien retour */
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 12px;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+    </style>
+
+    <div class="container">
+        <h1 class="title">Créer une nouvelle catégorie</h1>
+
+        {{ include('category_forum/_form.html.twig') }}
+
+        <a href="{{ path('app_category_forum_index') }}" class="btn-back">Retour à la liste</a>
+    </div>
+
+{% endblock %}

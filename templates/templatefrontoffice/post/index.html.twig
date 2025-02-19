@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Post Index{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <!-- Page Title -->
+        <h1 class="text-center text-primary mb-4">Post </h1>
+
+        <!-- Table -->
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{ post.id }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.contenu }}</td>
+                        <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            <a href="{{ path('app_post_show', {'id': post.id}) }}" class="btn btn-info btn-sm">Show</a>
+                            <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Create New Post -->
+        <div class="text-center mt-4">
+            <a href="{{ path('app_post_new') }}" class="btn btn-success btn-lg">Create New Post</a>
+        </div>
+    </div>
+
+    {% block styles %}
+    <style>
+        /* General Styling */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5rem;
+            color: #007bff;
+        }
+
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .table th, .table td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    {% endblock %}
+{% endblock %}
