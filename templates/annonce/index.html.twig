@@ -1,43 +1,52 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}Annonce index{% endblock %}
+{% block title %}Annonce Index{% endblock %}
 
 {% block body %}
-    <h1>Annonce index</h1>
+    <div class="container">
+        <h1 class="text-dark mb-4" style="font-size: 2.5rem; font-weight: 700;">Annonce Index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Poids</th>
-                <th>Prix</th>
-                <th>Description</th>
-                <th>Image</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for annonce in annonces %}
-            <tr>
-                <td>{{ annonce.id }}</td>
-                <td>{{ annonce.titre }}</td>
-                <td>{{ annonce.poids }}</td>
-                <td>{{ annonce.prix }}</td>
-                <td>{{ annonce.description }}</td>
-                <td>{{ annonce.image }}</td>
-                <td>
-                    <a href="{{ path('app_annonce_show', {'id': annonce.id}) }}">show</a>
-                    <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titre</th>
+                    <th>Poids</th>
+                    <th>Prix</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for annonce in annonces %}
+                    <tr>
+                        <td>{{ annonce.id }}</td>
+                        <td>{{ annonce.titre }}</td>
+                        <td>{{ annonce.poids }}</td>
+                        <td>{{ annonce.prix }}</td>
+                        <td>{{ annonce.description }}</td>
+                  <td >
+                      {% if annonce.image %}
+                          <img src="{{ asset('uploads/' ~ annonce.image) }}" alt="Image de l'annonce" class="img-thumbnail" style="width: 80px; height: auto;">
+                      {% else %}
+                          <img src="{{ asset('assetsFront/assets/img/default-annonce.jpg') }}" alt="Image par défaut" class="img-thumbnail" style="width: 80px; height: auto;">
+                      {% endif %}
+                  </td>
+                        <td>
+                            <a href="{{ path('app_annonce_show', {'id': annonce.id}) }}" class="btn btn-info btn-sm">Show</a>
+                            <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_annonce_new') }}">Create new</a>
+        <div class="mt-4">
+            <a href="{{ path('app_annonce_new') }}" class="btn btn-success">Create New Annonce</a>
+        </div>
+    </div>
 {% endblock %}

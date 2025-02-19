@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block active %}
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice">HOME </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{{ path('app_annonce_index_front') }}">SHOP</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/templatefrontoffice/collecte">COLLECT</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
+            </li>
+          
+          </ul>
+          
+        </div>
+        {% endblock %}
+
+
+        {% block body%}
+        
+        {% endblock %}

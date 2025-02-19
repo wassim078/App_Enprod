@@ -1,30 +1,245 @@
 {% extends 'base.html.twig' %}
+
 {% block active %}
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice">HOME </a>
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
+                <a class="nav-link" href="{{ path('app_annonce_index_front') }}">SHOP</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
+                <a class="nav-link" href="/templatefrontoffice/collecte">COLLECT</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
+                <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
             </li>
-          
-          </ul>
-          
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+<main class="main">
+
+
+   <!-- Categories Filter Section -->
+   <section id="categories" class="categories section">
+       <div class="container" data-aos="fade-up">
+           <h2 class="text-center mb-4 section-title">Catégories</h2>
+           <div class="row d-flex justify-content-center">
+               <div class="col-lg-12">
+                   <div class="row">
+                       {% for category in categories %}
+                           <div class="col-md-3 col-sm-6 mb-3">
+                               <div class="category-card text-center shadow-sm">
+                                   <a href="{{ path('app_annonce_index_front', {'category': category.id}) }}"
+                                      class="category-link {{ selectedCategoryId == category.id ? 'active' : '' }}">
+                                       {{ category.name }}
+                                   </a>
+                               </div>
+                           </div>
+                       {% else %}
+                           <p class="text-center no-category">Aucune catégorie disponible.</p>
+                       {% endfor %}
+                   </div>
+               </div>
+           </div>
+       </div>
+   </section>
+   <!-- /Categories Filter Section -->
+
+    <div class="filters-content container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Nos Annonces</h2>
+            <a href="{{ path('app_annonce_new_front') }}" class="btn btn-success">Ajouter une Annonce</a>
         </div>
-        {% endblock %}
+
+        <div class="row grid">
+            {% if annonces is not empty %}
+                {% for annonce in annonces %}
+                    <div class="col-sm-6 col-lg-4 all annonce mb-4">
+                        <div class="card shadow-sm">
+                            <div class="img-box">
+                                {% if annonce.image %}
+                                    <img src="{{ asset('uploads/' ~ annonce.image) }}" alt="Image de l'annonce" class="img-fluid rounded-top">
+                                {% else %}
+                                    <img src="{{ asset('assetsFront/assets/img/default-annonce.jpg') }}" alt="Image par défaut" class="img-fluid rounded-top">
+                                {% endif %}
+                            </div>
+                        <div class="card-body text-center">
+                            <h5 class="fw-bold annonce-title">{{ annonce.titre }}</h5>
+
+                            <p class="annonce-description">{{ annonce.description }}</p>
+
+                            <div class="annonce-details">
+                                <span class="label">Catégorie:</span>
+                                <span class="category-text">{{ annonce.category.name }}</span>
+                            </div>
+
+                            <div class="annonce-details">
+                                <span class="label">Prix:</span>
+                                <span class="price-text">${{ annonce.prix }}</span>
+                            </div>
+
+                            <button class="btn add-to-cart mt-3">
+                                <i class="fas fa-shopping-cart"></i> Ajouter au panier
+                            </button>
+                        </div>
 
 
 
-        {% block body%}
-        
-        {% endblock %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">Aucune annonce disponible.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}
+{% block stylesheets %}
+<style>
+   /* General Card Styling */
+   .card {
+       border: none;
+       border-radius: 15px;
+       overflow: hidden;
+       transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+       background: #fff;
+       padding: 15px;
+       box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+   }
+
+   .card:hover {
+       transform: translateY(-5px);
+       box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+   }
+
+   /* Title Styling */
+   .annonce-title {
+       font-size: 18px;
+       font-weight: bold;
+       color: #333;
+   }
+
+   /* Description */
+   .annonce-description {
+       font-size: 14px;
+       color: #666;
+       margin-bottom: 10px;
+   }
+
+   /* Details Styling */
+   .annonce-details {
+       display: flex;
+       justify-content: space-between;
+       font-size: 14px;
+       margin-bottom: 5px;
+   }
+
+   .label {
+       font-weight: bold;
+       color: #555;
+   }
+
+   .category-text {
+       color: green;
+       font-weight: bold;
+   }
+
+   .price-text {
+       color: #ff5733;
+       font-weight: bold;
+   }
+
+   /* Image Box */
+   .img-box img {
+       max-height: 250px;
+       object-fit: cover;
+       width: 100%;
+       border-top-left-radius: 15px;
+       border-top-right-radius: 15px;
+   }
+
+   /* Add to Cart Button */
+   .add-to-cart {
+       background: linear-gradient(45deg, #ff7f50, #ff5733);
+       color: white;
+       border: none;
+       padding: 10px 15px;
+       border-radius: 25px;
+       font-size: 14px;}
+       /* General Section Styling */
+       .categories.section {
+           padding: 50px 0;
+           background-color: #f8f9fa;
+           border-radius: 10px;
+       }
+
+       /* Section Title */
+       .section-title {
+           font-size: 24px;
+           font-weight: bold;
+           color: #333;
+           text-transform: uppercase;
+           margin-bottom: 30px;
+       }
+
+       /* Category Card */
+       .category-card {
+           background: white;
+           border-radius: 10px;
+           padding: 15px;
+           transition: all 0.3s ease-in-out;
+           border: 1px solid #ddd;
+       }
+
+       .category-card:hover {
+           transform: translateY(-5px);
+           box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+       }
+
+       /* Category Link */
+       .category-link {
+           display: block;
+           padding: 10px 15px;
+           font-size: 16px;
+           font-weight: bold;
+           color: #333;
+           text-decoration: none;
+           transition: all 0.3s ease-in-out;
+           border-radius: 8px;
+       }
+
+       /* Hover Effect */
+       .category-link:hover {
+           color: white;
+           background: linear-gradient(45deg, #53bb6b, #368749);
+           box-shadow: 0px 4px 10px rgba(255, 127, 80, 0.3);
+       }
+
+       /* Active Category */
+       .category-link.active {
+           color: white;
+           background: #368749;
+       }
+
+       /* No Category Message */
+       .no-category {
+           font-size: 16px;
+           color: #777;
+           text-align: center;
+           padding: 20px;
+       }
+
+
+</style>
+{% endblock %}

@@ -1,11 +1,117 @@
-{% extends 'base.html.twig' %}
+{% extends 'templatebackoffice/index.html.twig' %}
 
-{% block title %}New Annonce{% endblock %}
+{% block title %}Create New Annonce{% endblock %}
 
 {% block body %}
-    <h1>Create new Annonce</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header text-white text-center py-3" style="background-color: #1D6F42;">
+                        <h3 class="mb-0">Create New Annonce</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-    {{ include('annonce/_form.html.twig') }}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form_label(form.titre) }}</label>
+                            {{ form_widget(form.titre, {
+                                'attr': {
+                                    'class': 'form-control shadow-sm ' ~ (form.titre.vars.errors|length > 0 ? 'is-invalid' : ''),
+                                    'placeholder': 'Enter title of the annonce'
+                                }
+                            }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.titre) }}</div>
+                        </div>
 
-    <a href="{{ path('app_annonce_index') }}">back to list</a>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form_label(form.prix) }}</label>
+                            {{ form_widget(form.prix, {
+                                'attr': {
+                                    'class': 'form-control shadow-sm ' ~ (form.prix.vars.errors|length > 0 ? 'is-invalid' : ''),
+                                    'placeholder': 'Enter price'
+                                }
+                            }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.prix) }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form_label(form.description) }}</label>
+                            {{ form_widget(form.description, {
+                                'attr': {
+                                    'class': 'form-control shadow-sm ' ~ (form.description.vars.errors|length > 0 ? 'is-invalid' : ''),
+                                    'placeholder': 'Enter a detailed description'
+                                }
+                            }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.description) }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form_label(form.poids) }}</label>
+                            {{ form_widget(form.poids, {
+                                'attr': {
+                                    'class': 'form-control shadow-sm ' ~ (form.poids.vars.errors|length > 0 ? 'is-invalid' : ''),
+                                    'placeholder': 'Enter weight in kg'
+                                }
+                            }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.poids) }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form_label(form.imageFile) }}</label>
+                            {{ form_widget(form.imageFile, {
+                                'attr': {
+                                    'class': 'form-control-file ' ~ (form.imageFile.vars.errors|length > 0 ? 'is-invalid' : '')
+                                }
+                            }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.imageFile) }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form_label(form.category) }}</label>
+                            {{ form_widget(form.category, {
+                                'attr': {
+                                    'class': 'form-select shadow-sm ' ~ (form.category.vars.errors|length > 0 ? 'is-invalid' : '')
+                                }
+                            }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.category) }}</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-lg w-100 mt-4 py-2 shadow-sm text-white"
+                                style="background-color: #1D6F42; border: none; transition: 0.3s;">
+                            Save Annonce
+                        </button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_templatebackoffice', { 'page': 'shop-management' }) }}" class="btn btn-link text-decoration-none"
+                       style="color: #1D6F42; font-weight: bold;">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Hover Effects */
+        .btn:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        /* Input Focus */
+        .form-control:focus, .form-select:focus {
+            border-color: #1D6F42;
+            box-shadow: 0 0 5px rgba(29, 111, 66, 0.5);
+        }
+
+        /* Card Styling */
+        .card {
+            border-radius: 1rem;
+            border: 1px solid #1D6F42;
+        }
+    </style>
 {% endblock %}

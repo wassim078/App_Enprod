@@ -1,196 +1,130 @@
 <?php
-
 namespace App\Entity;
 
-use App\Repository\AnnonceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
-#[ORM\Entity(repositoryClass: AnnonceRepository::class)]
+#[ORM\Entity]
 class Annonce
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+#[ORM\Id]
+#[ORM\GeneratedValue]//autoincrement
+#[ORM\Column]
+private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+#[ORM\Column(type: Types::STRING, length: 100)]
+#[Assert\NotBlank]
+#[Assert\Length(max: 100)]
+private ?string $titre = null;
 
-    #[ORM\Column]
-    private ?float $poids = null;
+#[ORM\Column(type: Types::FLOAT)]
+#[Assert\Positive]
+private ?float $poids = null;
 
-    #[ORM\Column]
-    private ?float $prix = null;
+#[ORM\Column(type: Types::FLOAT)]
+#[Assert\Positive]
+private ?float $prix = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
+#[ORM\Column(type: Types::TEXT)]
+#[Assert\NotBlank]
+private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
+#[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+private ?string $image = null;
 
-    /**
-     * @var Collection<int, Panier>
-     */
-    #[ORM\ManyToMany(targetEntity: Panier::class, inversedBy: 'annonces')]
-    private Collection $panier;
+private ?File $imageFile = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
-    private ?CategorieAnnonce $categorieAnnonce = null;
+#[ORM\ManyToOne(targetEntity: Category::class)]
+#[ORM\JoinColumn(nullable: false)]
+#[Assert\NotBlank]
+private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
-    private ?User $user = null;
+#[ORM\Column(type: "datetime", nullable: true)]
+private ?\DateTimeInterface $updatedAt = null;
 
-    /**
-     * @var Collection<int, Commande>
-     */
-    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'annonces')]
-    private Collection $commandes;
+public function getId(): ?int
+{
+return $this->id;
+}
 
-    public function __construct()
-    {
-        $this->panier = new ArrayCollection();
-        $this->commandes = new ArrayCollection();
-    }
+public function getTitre(): ?string
+{
+return $this->titre;
+}
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+public function setTitre(string $titre): static
+{
+$this->titre = $titre;
+return $this;
+}
 
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
+public function getPoids(): ?float
+{
+return $this->poids;
+}
 
-    public function setTitre(string $titre): static
-    {
-        $this->titre = $titre;
+public function setPoids(float $poids): static
+{
+$this->poids = $poids;
+return $this;
+}
 
-        return $this;
-    }
+public function getPrix(): ?float
+{
+return $this->prix;
+}
 
-    public function getPoids(): ?float
-    {
-        return $this->poids;
-    }
+public function setPrix(float $prix): static
+{
+$this->prix = $prix;
+return $this;
+}
 
-    public function setPoids(float $poids): static
-    {
-        $this->poids = $poids;
+public function getDescription(): ?string
+{
+return $this->description;
+}
 
-        return $this;
-    }
+public function setDescription(string $description): static
+{
+$this->description = $description;
+return $this;
+}
 
-    public function getPrix(): ?float
-    {
-        return $this->prix;
-    }
+public function getImage(): ?string
+{
+return $this->image;
+}
 
-    public function setPrix(float $prix): static
-    {
-        $this->prix = $prix;
+public function setImage(?string $image): static
+{
+$this->image = $image;
+return $this;
+}
 
-        return $this;
-    }
+public function getImageFile(): ?File
+{
+return $this->imageFile;
+}
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+public function setImageFile(?File $imageFile): void
+{
+$this->imageFile = $imageFile;
+if ($imageFile) {
+$this->updatedAt = new \DateTimeImmutable();
+}
+}
 
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
+public function getCategory(): ?Category
+{
+return $this->category;
+}
 
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Panier>
-     */
-    public function getPanier(): Collection
-    {
-        return $this->panier;
-    }
-
-    public function addPanier(Panier $panier): static
-    {
-        if (!$this->panier->contains($panier)) {
-            $this->panier->add($panier);
-        }
-
-        return $this;
-    }
-
-    public function removePanier(Panier $panier): static
-    {
-        $this->panier->removeElement($panier);
-
-        return $this;
-    }
-
-    public function getCategorieAnnonce(): ?CategorieAnnonce
-    {
-        return $this->categorieAnnonce;
-    }
-
-    public function setCategorieAnnonce(?CategorieAnnonce $categorieAnnonce): static
-    {
-        $this->categorieAnnonce = $categorieAnnonce;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommandes(): Collection
-    {
-        return $this->commandes;
-    }
-
-    public function addCommande(Commande $commande): static
-    {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes->add($commande);
-            $commande->addAnnonce($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): static
-    {
-        if ($this->commandes->removeElement($commande)) {
-            $commande->removeAnnonce($this);
-        }
-
-        return $this;
-    }
+public function setCategory(?Category $category): static
+{
+$this->category = $category;
+return $this;
+}
 }
