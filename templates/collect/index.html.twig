@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Collect index{% endblock %}
+
+{% block body %}
+    <h1>Collect index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>NomProduit</th>
+                <th>Quantite</th>
+                <th>Lieu</th>
+                <th>DateDebut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for collect in collects %}
+            <tr>
+                <td>{{ collect.id }}</td>
+                <td>{{ collect.titre }}</td>
+                <td>{{ collect.nomProduit }}</td>
+                <td>{{ collect.quantite }}</td>
+                <td>{{ collect.lieu }}</td>
+                <td>{{ collect.dateDebut ? collect.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_collect_show', {'id': collect.id}) }}">show</a>
+                    <a href="{{ path('app_collect_edit', {'id': collect.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_collect_new') }}">Create new</a>
+{% endblock %}

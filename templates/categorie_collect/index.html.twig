@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CategorieCollect index{% endblock %}
+
+{% block body %}
+    <h1>CategorieCollect index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie_collect in categorie_collects %}
+            <tr>
+                <td>{{ categorie_collect.id }}</td>
+                <td>{{ categorie_collect.name }}</td>
+                <td>{{ categorie_collect.description }}</td>
+                <td>
+                    <a href="{{ path('app_categorie_collect_show', {'id': categorie_collect.id}) }}">show</a>
+                    <a href="{{ path('app_categorie_collect_edit', {'id': categorie_collect.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categorie_collect_new') }}">Create new</a>
+{% endblock %}
