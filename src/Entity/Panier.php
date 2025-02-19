@@ -22,7 +22,7 @@ class Panier
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'paniers')]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'panier')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
@@ -90,7 +90,7 @@ class Panier
     {
         if (!$this->annonces->contains($annonce)) {
             $this->annonces->add($annonce);
-            $annonce->addPanier($this);
+            $annonce->addPanier($this); // Gérer la relation inverse
         }
 
         return $this;
@@ -99,7 +99,7 @@ class Panier
     public function removeAnnonce(Annonce $annonce): static
     {
         if ($this->annonces->removeElement($annonce)) {
-            $annonce->removePanier($this);
+            $annonce->removePanier($this); // Gérer la relation inverse
         }
 
         return $this;

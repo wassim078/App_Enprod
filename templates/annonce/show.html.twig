@@ -1,54 +1,78 @@
-{% extends 'templatebackoffice/index.html.twig' %}
+{% extends 'base.html.twig' %}
 
-
-{% block title %}Annonce Details{% endblock %}
+{% block title %}Annonce{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="text-dark mb-4" style="font-size: 2.5rem; font-weight: 700;">Annonce Details</h1>
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h1 class="card-title mb-0">Annonce Details</h1>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th class="bg-light">Id</th>
+                            <td>{{ annonce.id }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Titre</th>
+                            <td>{{ annonce.titre }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Poids</th>
+                            <td>{{ annonce.poids }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Prix</th>
+                            <td>{{ annonce.prix }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Description</th>
+                            <td>{{ annonce.description }}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">Image</th>
+                            <td>
+                                {% if annonce.image %}
+                                    <img src="{{ asset('uploads/images/' ~ annonce.image) }}" alt="{{ annonce.titre }}" class="img-thumbnail" style="max-width: 150px;">
+                                {% else %}
+                                    <span class="text-muted">No image</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <div class="card shadow-sm p-4">
-        <table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <th class="w-25">ID</th>
-                    <td>{{ annonce.id }}</td>
-                </tr>
-                <tr>
-                    <th>Titre</th>
-                    <td>{{ annonce.titre }}</td>
-                </tr>
-                <tr>
-                    <th>Poids</th>
-                    <td>{{ annonce.poids }}</td>
-                </tr>
-                <tr>
-                    <th>Prix</th>
-                    <td>{{ annonce.prix }} €</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td>{{ annonce.description }}</td>
-                </tr>
-                <tr>
-                    <th>Image</th>
-                    <td class="text-center">
-                        {% if annonce.image %}
-                            <img src="{{ asset('uploads/' ~ annonce.image) }}" alt="{{ annonce.titre }}" class="img-thumbnail" style="width: 150px; height: auto;">
-                        {% else %}
-                            <span class="text-secondary">No Image Available</span>
-                        {% endif %}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ path('app_annonce_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to list
+                    </a>
+                    <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </div>
+
+                {# Formulaire de suppression #}
+                <div class="mt-4">
+                    {{ include('annonce/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
     </div>
+{% endblock %}
 
-    <div class="mt-4">
-        <a href="{{ path('app_templatebackoffice', { 'page': 'shop-management' }) }}" class="btn btn-secondary">Back to List</a>
+{# Inclure Bootstrap CSS et Font Awesome #}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+{% endblock %}
 
-        <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}" class="btn btn-warning">Edit</a>
-        {{ include('annonce/_delete_form.html.twig') }}
-    </div>
-</div>
+{# Inclure Bootstrap JS et dépendances #}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
