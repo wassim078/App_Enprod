@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice">HOME </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice/collecte">COLLECT</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <!-- Enter your code -->
+    {% block styles %}
+    <style>
+        /* Style de la page */
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #007bff;
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5rem;
+        }
+
+        .table {
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .table tbody tr td a {
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .table th, .table td {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+    {% endblock %}
+
+    <h1>CategorieForum </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie_forum in categorie_forums %}
+            <tr>
+                <td>{{ categorie_forum.id }}</td>
+                <td>{{ categorie_forum.name }}</td>
+                <td>{{ categorie_forum.description }}</td>
+                <td>
+                    <!-- Ajout du bouton d'entrée -->
+                    <a href="{{ path('app_forum_show', {'id': categorie_forum.id}) }}" class="btn btn-success">Enter Forum</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
