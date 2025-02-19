@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CollectRepository;
 
+
 #[Route('/templatefrontoffice/collect')]
 class CollectController extends AbstractController
 { 
@@ -23,6 +24,26 @@ class CollectController extends AbstractController
         ]);
     }
 
+    
+    #[Route('/collect', name: 'collect_list')]
+    public function list(CollectsRepository $collectsRepo): Response
+    {
+        $collects = $collectsRepo->findAllWithCategories();
+        
+        // Group collects by category
+        $grouped = [];
+        foreach ($collects as $collect) {
+            $category = $collect->getCategorieCollect();
+            if ($category) {
+                $categoryName = $category->getNom();
+                $grouped[$categoryName][] = $collect;
+            }
+        }
+    
+        return $this->render('collect/list.html.twig', [
+            'grouped_collects' => $grouped,
+        ]);
+    }
 
     #[Route('/new', name: 'app_collect_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -80,4 +101,6 @@ class CollectController extends AbstractController
 
         return $this->redirectToRoute('app_collect_index', [], Response::HTTP_SEE_OTHER);
     }
+ 
+    
 }
