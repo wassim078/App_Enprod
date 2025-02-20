@@ -129,7 +129,11 @@ final class TemplatebackofficeController extends AbstractController{
                 $form = $this->createForm(UserForm::class, $user);
                 $form->handleRequest($request);
         
-                if ($form->isSubmitted()) {
+
+           
+
+                if ($form->isSubmitted() && $form->isValid()) {
+
                     
 
                     $plainPassword = $form->get('plainPassword')->getData();

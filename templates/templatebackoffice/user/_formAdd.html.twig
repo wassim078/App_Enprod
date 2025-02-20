@@ -1,9 +1,16 @@
+
 {{ form_start(form,{ 'attr':{'novalidate':'novalidate'} }) }}
+
+{# templatebackoffice/user/_form.html.twig #}
+
 <div class="form-container">
     <div class="upload-wrapper">
         <div class="image-upload-circle" onclick="document.getElementById('user_image').click();">
             <div id="imagePreview" class="preview">
                 <img src="{{ asset('frontoffice/images/default.jpg') }}" alt="Default Image" style="width:100%; height:100%; object-fit: cover;">
+
+                <i class="fas fa-camera"></i>
+
             </div>
             {{ form_widget(form.image, {
                 'attr': {
@@ -45,6 +52,10 @@
             {{ form_widget(form.roles, {'attr': {'class': 'form-control'}}) }}
             <small class="text-danger">{{ form_errors(form.roles) }}</small>
         </div>
+
+        </div>
+        {# Add your other fields for password, adresse, telephone, roles, etc. #}
+
     </div>
 
     <div class="form-actions">
@@ -61,7 +72,10 @@
         max-width: 800px;
         margin: 40px auto;
         padding: 30px;
+
         background-color:rgb(213, 231, 221); /* light green background */
+        background-color: #e9f7ef; /* light green background */
+
         border: 2px solid #97bc62;
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -158,3 +172,4 @@ function previewImage(input) {
     }
 }
 </script>
+

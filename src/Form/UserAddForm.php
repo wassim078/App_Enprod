@@ -45,7 +45,10 @@ class UserAddForm extends AbstractType
         ->add('adresse', TextType::class, [
             'required' => true,])
 
-        ->add('telephone', TextType::class, [
+
+
+        ->add('telephone', TelType::class, [
+
             'required' => true,])
 
             

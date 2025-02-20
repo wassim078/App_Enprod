@@ -1,29 +1,45 @@
-{% extends 'base.html.twig' %}
-{% block active %}
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice">HOME </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/templatefrontoffice/collecte">COLLECT</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
-            </li>
-          
-          </ul>
-          
-        </div>
-        {% endblock %}
+{% extends 'templatefrontoffice/maincollect.html.twig' %}
+{% block header%}
+<header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="/templatefrontoffice">
+            <img src="frontoffice/images/logo_rounded.png" alt="LiveCycle Logo" style="height: 55px; width: 55px; margin-right: 20px;">
+            <span>LiveCycle</span>
+          </a>
 
 
-        {% block body%}
-        
-        {% endblock %}
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mx-auto ">
+              <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice">HOME <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/templatefrontoffice/maincollect">COLLECT</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/reclamation">RECLAMATION</a>
+              </li>
+            </ul>
+            <div class="user_option">
+              
+              
+              
+              <a href="/templatebackoffice/authentication-login" class="order_online">
+                LOG IN
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
