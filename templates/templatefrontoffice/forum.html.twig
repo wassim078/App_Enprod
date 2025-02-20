@@ -9,7 +9,7 @@
               <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/collecte">COLLECT</a>
+              <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
@@ -21,47 +21,10 @@
           </ul>
           
         </div>
-
-        
         {% endblock %}
 
+
         {% block body%}
-
         
-       <!-- Enter your code -->
-
-        
-         <h1>CategorieForum index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for categorie_forum in categorie_forums %}
-            <tr>
-                <td>{{ categorie_forum.id }}</td>
-                <td>{{ categorie_forum.name }}</td>
-                <td>{{ categorie_forum.description }}</td>
-                <td>  <!-- Ajout du bouton d'entrée -->
-<a href="{{ path('app_forum_show', {'id': categorie_forum.id}) }}" class="btn btn-success">Enter Forum</a>
-               
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    
-
-
         
         {% endblock %}

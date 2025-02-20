@@ -1,71 +1,43 @@
-{% extends '/templatefrontoffice/annonce.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Annonce index{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h1 class="card-title mb-0">Annonce Index</h1>
-            </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <a href="{{ path('app_annonce_new') }}" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Create new
-                    </a>
-                </div>
+    <h1>Annonce index</h1>
 
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Titre</th>
-                                <th scope="col">Poids</th>
-                                <th scope="col">Prix</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                 {# templates/annonce/index.html.twig #}
-{% for annonce in annonces %}
-    <div class="col-md-4">
-        <div class="card">
-            <img src="{{ asset('frontoffice/images/annonce2.jpg') }}" class="card-img-top" alt="Annonce 2">
-            <div class="card-body">
-                <h5 class="card-title">{{ annonce.titre }}</h5>
-                <p class="card-text">{{ annonce.description }}</p>
-                
-                <!-- Formulaire pour ajouter au panier -->
-                <form action="{{ path('app_annonce_add_to_panier', {'id': annonce.id}) }}" method="POST" style="display: inline;">
-                    <input type="hidden" name="_token" value="{{ csrf_token('add-to-panier' ~ annonce.id) }}">
-                    <button type="submit" class="btn btn-primary" style="background-color: #489050;">Ajouter au panier</button>
-                </form>
-            </div>
-        </div>
-    </div>
-{% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Poids</th>
+                <th>Prix</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for annonce in annonces %}
+            <tr>
+                <td>{{ annonce.id }}</td>
+                <td>{{ annonce.titre }}</td>
+                <td>{{ annonce.poids }}</td>
+                <td>{{ annonce.prix }}</td>
+                <td>{{ annonce.description }}</td>
+                <td>{{ annonce.image }}</td>
+                <td>
+                    <a href="{{ path('app_annonce_show', {'id': annonce.id}) }}">show</a>
+                    <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-                {# Pagination #}
-                {% if annonces|length > 10 %}
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center mt-4">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+    <a href="{{ path('app_annonce_new') }}">Create new</a>
 {% endblock %}

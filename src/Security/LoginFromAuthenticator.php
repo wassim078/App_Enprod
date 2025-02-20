@@ -50,23 +50,6 @@ class LoginFromAuthenticator extends AbstractLoginFormAuthenticator
     {
         $user = $token->getUser();
 
-        $roles = $user->getRoles();
-        // Redirect based on the user's role
-        if (in_array('ROLE_ADMIN', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_templatebackoffice'));
-        } elseif (in_array('ROLE_CLIENT', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
-        } elseif (in_array('ROLE_LIVREUR', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
-        } elseif (in_array('ROLE_ENTREPRISE', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
-        }
-
-        // Fallback route if no role matches
-        return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
-
-
-        /*
         // Get the user's roles
         
 
@@ -87,11 +70,25 @@ class LoginFromAuthenticator extends AbstractLoginFormAuthenticator
             )
         );
         return $response;
-        */
 
     }
-    
-    
+        private function createRedirectResponse($user): RedirectResponse
+    {
+        $roles = $user->getRoles();
+        // Redirect based on the user's role
+        if (in_array('ROLE_ADMIN', $roles, true)) {
+            return new RedirectResponse($this->urlGenerator->generate('app_templatebackoffice'));
+        } elseif (in_array('ROLE_CLIENT', $roles, true)) {
+            return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
+        } elseif (in_array('ROLE_LIVREUR', $roles, true)) {
+            return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
+        } elseif (in_array('ROLE_ENTREPRISE', $roles, true)) {
+            return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
+        }
+
+        // Fallback route if no role matches
+        return new RedirectResponse($this->urlGenerator->generate('app_templatefrontoffice'));
+    }
 
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));

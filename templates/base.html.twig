@@ -11,253 +11,326 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <link rel="icon" href="frontoffice/images/livecycle.jpg" type="">
+  <link rel="icon" href="{{asset('frontoffice/images/livecycle.jpg')}}" type="">
 
-  {% block title %}<title> LiveCycle </title>{% endblock %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="frontoffice/css/bootstrap.css" />
+  <title>{% block title %}LiveCycle{% endblock %}</title>
 
-  <!--owl slider stylesheet -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" href="{{asset('frontoffice/css/bootstrap.css')}}" />
+
+  <!-- Owl Carousel CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-  <!-- nice select  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
-  <!-- font awesome style -->
-  <link href="frontoffice/css/font-awesome.min.css" rel="stylesheet" />
 
-  <!-- Custom styles for this template -->
-  <link href="frontoffice/css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="frontoffice/css/responsive.css" rel="stylesheet" />
+  <!-- Font Awesome CSS -->
+  <link href="{{asset('frontoffice/css/font-awesome.min.css')}}" rel="stylesheet" />
+
+  <!-- Custom Styles -->
+  <link href="{{asset('frontoffice/css/style.css')}}" rel="stylesheet" />
+  <link href="{{asset('frontoffice/css/responsive.css')}}" rel="stylesheet" />
+
+  <!-- Custom Styles for This Page -->
+  <style>
+    .header_section {
+      background-color:rgb(33, 75, 39) !important;
+      padding: 15px 0;
+    }
+
+    .navbar {
+      background-color: rgb(33, 75, 39) !important;
+    }
+
+    .hero_area {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{asset('frontoffice/images/homebackground.jpg')}}');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero_area .detail-box {
+      text-align: center;
+      color: white;
+    }
+
+    .hero_area .detail-box h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .hero_area .detail-box p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+    }
+
+    .carousel-indicators {
+      bottom: 20px;
+    }
+
+    .carousel-indicators li {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      margin: 0 5px;
+    }
+
+    .carousel-indicators li.active {
+      background-color: white;
+    }
+
+    .client_section {
+      padding: 60px 0;
+      background-color: #f8f9fa;
+    }
+
+    .client_section .heading_container {
+      margin-bottom: 40px;
+    }
+
+    .client_section .heading_container h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .client_section .box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .client_section .box img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    .footer_section {
+      background-color: rgb(33, 75, 39);
+      color: white;
+      padding: 40px 0;
+    }
+
+    .footer_section a {
+      color: white;
+    }
+
+    .footer_section .footer-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .footer_section .footer_social a {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+  </style>
+
+
+
+
+
+  {% block stylesheets %}{% endblock %}
+
+
 
 
 </head>
 
 
-  {% block body %}
-  <div class="hero_area">
-    <div class="bg-box">
-      <img src="frontoffice/images/homebackground.jpg" alt="">
+
+
+
+
+
+  {% block header %}
+  <!-- Header Section -->
+  <header class="header_section">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg custom_nav-container">
+        <a class="navbar-brand" href="/templatefrontoffice">
+          <img src="{{asset('frontoffice/images/logo_rounded.png')}}" alt="LiveCycle Logo" style="height: 55px; width: 55px; margin-right: 20px;">
+          <span>LiveCycle</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class=""></span>
+        </button>
+        {% block active %}
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice">HOME </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/forum">RECLAMATION</a>
+            </li>
+          </ul>
+        </div>
+
+        {% endblock %}
+        
+        <div class="user_option">
+            <a href="/login" class="order_online">
+              LOG IN
+            </a>
+          </div>
+      </nav>
     </div>
-    <!-- header section strats -->
-    <header class="header_section">
-      <div class="container">
-        <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="/templatefrontoffice">
-            <img src="frontoffice/images/logo_rounded.png" alt="LiveCycle Logo" style="height: 55px; width: 55px; margin-right: 20px;">
-            <span>LiveCycle</span>
-          </a>
+  </header>
+  {% endblock %}
 
 
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class=""> </span>
-          </button>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav  mx-auto ">
-              <li class="nav-item active">
-                <a class="nav-link" href="/templatefrontoffice">HOME <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/templatefrontoffice/maincollect">COLLECT</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/reclamation">RECLAMATION</a>
-              </li>
-            </ul>
-            <div class="user_option">
-              
-              
-              
-              <a href="/templatebackoffice/authentication-login" class="order_online">
-                LOG IN
-              </a>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </header>
-    <!-- end header section -->
-    <!-- slider section -->
-    <section class="slider_section ">
-      <div id="customCarousel1" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-7 col-lg-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      Green Recycle 🌱
-                    </h1>
-                    <p>
-                     
-"Thanks to this platform, we were able to access a constant flow of quality recyclable raw materials. A smooth and efficient collaboration!"
-                    </p>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item ">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-7 col-lg-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      BioWood Recycling 🌳
-                    </h1>
-                    <p>
-                      "Finally a platform that connects recycling stakeholders! We have improved our collection of used wood and reduced our costs."
-                    </p>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-7 col-lg-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      Papier Vert and Co 📄
 
-                    </h1>
-                    <p>
-                     "We highly recommend this platform! It allows us to recover recyclable papers quickly and efficiently."
-                    </p>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="carousel-item ">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-7 col-lg-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      ÉcoMétal Recyclage 🏭
-                    </h1>
-                    <p>
-                      "This platform allows us to buy aluminum cans at competitive prices while contributing to the circular economy. A reliable and efficient service!"
-                    </p>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item ">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-7 col-lg-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      Verte Solutions 🌎
-                    </h1>
-                    <p>
-                      "Sorting and collecting waste becomes much simpler thanks to this initiative. We have increased our ecological impact while optimizing our resources."
-                    </p>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
+
+
+
+
+  {% block body %}
+  <!-- Hero Section -->
+  <div class="hero_area">
+    <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+    <!-- Carousel Items -->
+    <div class="carousel-inner">
+      <!-- Slide 1 -->
+      <div class="carousel-item active">
         <div class="container">
-          <ol class="carousel-indicators">
-            <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-            <li data-target="#customCarousel1" data-slide-to="1"></li>
-            <li data-target="#customCarousel1" data-slide-to="2"></li>
-            <li data-target="#customCarousel1" data-slide-to="3"></li>
-            <li data-target="#customCarousel1" data-slide-to="4"></li>
-          </ol>
+          <div class="row">
+            <div class="col-md-7 col-lg-6">
+              <div class="detail-box">
+                <h1>Green Recycle🌱</h1>
+                <p>
+                  "Thanks to this platform, we were able to access a constant flow of quality recyclable raw materials. A smooth and efficient collaboration!"
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-    </section>
-    <!-- end slider section -->
+      <!-- Slide 2 -->
+      <div class="carousel-item">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7 col-lg-6">
+              <div class="detail-box">
+                <h1>Solutions🌍</h1>
+                <p>
+                  "Join us in making the world a greener place. Recycle, reuse, and reduce waste with LiveCycle!"
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      <!-- Slide 3 -->
+      <div class="carousel-item">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7 col-lg-6">
+              <div class="detail-box">
+                <h1>Sustainable Future🌿</h1>
+                <p>
+                  "Together, we can build a cleaner, greener, and more sustainable future. Start recycling today with LiveCycle and make a real impact!"
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="carousel-item">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7 col-lg-6">
+              <div class="detail-box">
+                <h1>Community Impact🤝</h1>
+                <p>
+                  "Our platform connects communities to recycling stakeholders, creating a positive impact on the environment."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5 -->
+      <div class="carousel-item">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7 col-lg-6">
+              <div class="detail-box">
+                <h1>Innovativ Recyclin🚀</h1>
+                <p>
+                  "Discover innovative solutions for recycling waste. Join LiveCycle today and be part of the change."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel Indicators -->
+    <div class="container mt-5 mr-5">
+      <ol class="carousel-indicators">
+        <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+        <li data-target="#customCarousel1" data-slide-to="1"></li>
+        <li data-target="#customCarousel1" data-slide-to="2"></li>
+        <li data-target="#customCarousel1" data-slide-to="3"></li>
+        <li data-target="#customCarousel1" data-slide-to="4"></li>
+      </ol>
+    </div>
+    </div>
   </div>
 
-  <!-- offer section -->
-
- 
-
-  <!-- end offer section -->
-
-  <!-- food section -->
-
-
-  <!-- end food section -->
-
-  <!-- about section -->
-
-
-  <!-- end about section -->
-
-  <!-- book section -->
-  
-  <!-- end book section -->
-
-  <!-- client section -->
-
-  <section class="client_section layout_padding-bottom">
+  <!-- Customer Testimonials Section -->
+  <section class="client_section">
     <div class="container">
-    
-      <div class="heading_container heading_center psudo_white_primary mb_45 mt-5">
-        <h2>
-          What Says Our Customers
-        </h2>
+      <div class="heading_container heading_center">
+        <h2>What Our Customers Say</h2>
       </div>
-      <div class="carousel-wrap row ">
-        <div class="owl-carousel client_owl-carousel">
-          <div class="item">
-            <div class="box">
-              <div class="detail-box">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-                </p>
-                <h6>
-                  Moana Michell
-                </h6>
-                <p>
-                  magna aliqua
-                </p>
-              </div>
-              <div class="img-box">
-                <img src="frontoffice/images/client1.jpg" alt="" class="box-img">
-              </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box">
+            <img src="{{asset('frontoffice/images/client1.jpg')}}" alt="Client 1">
+            <div class="detail-box">
+              <p>
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              </p>
+              <h6>Moana Michell</h6>
             </div>
           </div>
-          <div class="item">
-            <div class="box">
-              <div class="detail-box">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-                </p>
-                <h6>
-                  Mike Hamell
-                </h6>
-                <p>
-                  magna aliqua
-                </p>
-              </div>
-              <div class="img-box">
-                <img src="frontoffice/images/client2.jpg" alt="" class="box-img">
-              </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box">
+            <img src="{{asset('frontoffice/images/client2.jpg')}}" alt="Client 2">
+            <div class="detail-box">
+              <p>
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              </p>
+              <h6>Mike Hamell</h6>
             </div>
           </div>
         </div>
@@ -265,109 +338,73 @@
     </div>
   </section>
 
-  <!-- end client section -->
 
-  <!-- footer section -->
+
+  {% endblock body %}
+
+
+
+
+
+
+
+
+
+
+
+  {% block footer %}
+  
+
   <footer class="footer_section">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 footer-col">
+        <div class="col-md-4">
           <div class="footer_contact">
-            <h4>
-              Contact Us
-            </h4>
+            <h4>Contact Us</h4>
             <div class="contact_link_box">
-              <a href="">
-                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                <span>
-                  Location
-                </span>
-              </a>
-              <a href="">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-                <span>
-                  Call +01 1234567890
-                </span>
-              </a>
-              <a href="">
-                <i class="fa fa-envelope" aria-hidden="true"></i>
-                <span>
-                  demo@gmail.com
-                </span>
-              </a>
+              <a href=""><i class="fa fa-map-marker"></i> Location</a>
+              <a href=""><i class="fa fa-phone"></i> Call +01 1234567890</a>
+              <a href=""><i class="fa fa-envelope"></i> demo@gmail.com</a>
             </div>
           </div>
         </div>
-        <div class="col-md-4 footer-col">
+        <div class="col-md-4">
           <div class="footer_detail">
-            <a href="" class="footer-logo">
-              LiveCycle
-            </a>
+            <a href="" class="footer-logo">LiveCycle</a>
             <p>
-             the simple and effective solution to collect, sell and learn how to recycle your waste. We connect individuals and businesses to recycling stakeholders for a more sustainable future."
+              "The simple and effective solution to collect, sell, and learn how to recycle your waste."
             </p>
             <div class="footer_social">
-              <a href="">
-                <i class="fa fa-facebook" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-instagram" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-pinterest" aria-hidden="true"></i>
-              </a>
+              <a href=""><i class="fa fa-facebook"></i></a>
+              <a href=""><i class="fa fa-twitter"></i></a>
+              <a href=""><i class="fa fa-linkedin"></i></a>
+              <a href=""><i class="fa fa-instagram"></i></a>
             </div>
           </div>
         </div>
-        <div class="col-md-4 footer-col">
-          <h4>
-            Opening Hours
-          </h4>
-          <p>
-            Everyday
-          </p>
-          <p>
-            10.00 Am -10.00 Pm
-          </p>
+        <div class="col-md-4">
+          <h4>Opening Hours</h4>
+          <p>Everyday</p>
+          <p>10.00 Am - 10.00 Pm</p>
         </div>
       </div>
       <div class="footer-info">
-        <p>
-          &copy; <span id="displayYear"></span> All Rights Reserved 
-          
-        </p>
+        <p>&copy; <span id="displayYear"></span> All Rights Reserved</p>
       </div>
     </div>
   </footer>
-  <!-- footer section -->
 
-  <!-- jQery -->
-  <script src="frontoffice/js/jquery-3.4.1.min.js"></script>
-  <!-- popper js -->
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-  </script>
-  <!-- bootstrap js -->
-  <script src="frontoffice/js/bootstrap.js"></script>
-  <!-- owl slider -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
-  </script>
-  <!-- isotope js -->
-  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
-  <!-- nice select -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
-  <!-- custom js -->
-  <script src="frontoffice/js/custom.js"></script>
-  <!-- Google Map -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
-  </script>
-  <!-- End Google Map -->
 
-{% endblock %}
+  
+
+  <!-- Scripts -->
+  <script src="{{asset('frontoffice/js/jquery-3.4.1.min.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="{{asset('frontoffice/js/bootstrap.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="{{asset('frontoffice/js/custom.js')}}"></script>
+
+
+{% endblock footer %}
 
 </html>

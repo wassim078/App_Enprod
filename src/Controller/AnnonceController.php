@@ -78,43 +78,4 @@ final class AnnonceController extends AbstractController
 
         return $this->redirectToRoute('app_annonce_index', [], Response::HTTP_SEE_OTHER);
     }
-    // src/Controller/AnnonceController.php
-// src/Controller/AnnonceController.php
-/*#[Route('/annonce/{id}/add-to-panier', name: 'app_annonce_add_to_panier', methods: ['POST'])]
-public function addToPanier(Request $request, Annonce $annonce, EntityManagerInterface $entityManager): Response
-{
-    // Récupérer l'utilisateur connecté
-    $user = $this->getUser();
-  
-
-    // Récupérer le panier de l'utilisateur
-    $panier = $user->getPanier();
-    if (!$panier) {
-        $panier = new Panier();
-        $panier->setUser($user); // Lier le panier à l'utilisateur
-        $entityManager->persist($panier);
-    }
-
-    // Ajouter l'annonce au panier
-    if (!$panier->getAnnonces()->contains($annonce)) {
-        $panier->addAnnonce($annonce);
-        $entityManager->flush();
-        $this->addFlash('success', 'Annonce ajoutée au panier avec succès !');
-    } else {
-        $this->addFlash('warning', 'Cette annonce est déjà dans votre panier.');
-    }
-
-    return $this->redirectToRoute('app_annonce_index');
-}*/
-#[Route('/{id}/add-to-panier', name: 'app_annonce_add_to_panier', methods: ['POST'])]
-public function addToPanier(Annonce $annonce): JsonResponse
-{
-    // Retournez les données de l'annonce au format JSON
-    return $this->json([
-        'id' => $annonce->getId(),
-        'titre' => $annonce->getTitre(),
-        'prix' => $annonce->getPrix(),
-        'image' => $annonce->getImage(),
-    ]);
-}
 }
