@@ -30,27 +30,29 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
+                
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'You should enter a password',
+                    ]), new Length([
+                        'min' => 3,
+                        'max' => 15,
+                        'minMessage' => 'Password should be at least 3 characters long.',
+                        'maxMessage' => 'Password should not exceed 15 characters.',
+                    ]),
+                ],
+                
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
             ])
 
             ->add('adresse', TextType::class, [
                 'required' => true, // Set to true if the field is mandatory
             ])
-            ->add('telephone', TelType::class, [
+            ->add('telephone', TextType::class, [
                 'required' => true, // Set to true if the field is mandatory
             ])
 
