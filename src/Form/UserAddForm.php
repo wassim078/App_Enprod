@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\CallbackTransformer;
-class UserForm extends AbstractType
+class UserAddForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
 {
@@ -30,10 +30,25 @@ class UserForm extends AbstractType
         ->add('email')
         ->add('plainPassword', PasswordType::class, [
             'mapped' => false,
-            'required' => false,
+            'required' => true, // Make password mandatory
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'Please enter a password',
+                ]),
+                new Length([
+                    'min' => 6,
+                    'minMessage' => 'Your password should be at least {{ limit }} characters',
+                    'max' => 4096,
+                ]),
+            ],
         ])
-        ->add('adresse', TextType::class)
-        ->add('telephone', TelType::class)
+        ->add('adresse', TextType::class, [
+            'required' => true,])
+
+        ->add('telephone', TextType::class, [
+            'required' => true,])
+
+            
         ->add('roles', ChoiceType::class, [
             'choices' => [
                 'Client' => 'ROLE_CLIENT',

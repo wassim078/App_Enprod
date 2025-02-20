@@ -1,138 +1,128 @@
-
 {% extends 'templatebackoffice/index.html.twig' %}
 
-
-{% block title%}UserManagement{% endblock %}
-
+{% block title %}User Management{% endblock %}
 
 {% block active %}
-
-            <li class="sidebar-item " >
-              <a class="sidebar-link" href="/templatebackoffice"  aria-expanded="false" >
-                <span>
-                  <i class="ti ti-layout-dashboard"></i>
-                </span>
-                <span class="hide-menu">Home</span>
-              </a>
-            </li>
-            
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/templatebackoffice/user-management"  style="background-color: #379226" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user"></i>
-                </span>
-                <span class="hide-menu">User Management</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/templatebackoffice/shop-management"  aria-expanded="false">
-                <span>
-                  <i class="ti ti-recycle "></i>
-                </span>
-                <span class="hide-menu">Shop Management</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/templatebackoffice/collect-management"  aria-expanded="false">
-                <span>
-                  <i class="ti ti-map-pin"></i>
-                </span>
-                <span class="hide-menu">Collect Management</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/templatebackoffice/forum-management"  aria-expanded="false">
-                <span>
-                  <i class="ti ti-message-circle"></i>
-                </span>
-                <span class="hide-menu">Forum Management</span>
-              </a>
-            </li>
-
-                                    {% endblock %}
+    <li class="sidebar-item">
+        <a class="sidebar-link" href="/templatebackoffice" aria-expanded="false">
+            <span><i class="ti ti-layout-dashboard"></i></span>
+            <span class="hide-menu">Home</span>
+        </a>
+    </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link" href="/templatebackoffice/user-management" style="background-color: #379226" aria-expanded="false">
+            <span><i class="ti ti-user"></i></span>
+            <span class="hide-menu">User Management</span>
+        </a>
+    </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link" href="/templatebackoffice/shop-management" aria-expanded="false">
+            <span><i class="ti ti-recycle"></i></span>
+            <span class="hide-menu">Shop Management</span>
+        </a>
+    </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link" href="/templatebackoffice/collect-management" aria-expanded="false">
+            <span><i class="ti ti-map-pin"></i></span>
+            <span class="hide-menu">Collect Management</span>
+        </a>
+    </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link" href="/templatebackoffice/forum-management" aria-expanded="false">
+            <span><i class="ti ti-message-circle"></i></span>
+            <span class="hide-menu">Forum Management</span>
+        </a>
+    </li>
+{% endblock %}
 
 
 
-
-
+{% block stylesheets %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">{% endblock %}
 
 {% block body %}
-
-
-<div class="container">
-        <h1>User Management</h1>
-
-        <!-- Add User Button -->
-        <div class="mb-3">
-            <a href="{{ path('admin_user_management') }}" class="btn btn-success mt-5">
-                <i class="fas fa-plus"></i> Add User
+    <div class="container">
+       <div class="mb-4 text-end mt-4">
+            <a href="{{ path('app_user_new') }}" 
+               class="btn btn-success btn-lg" 
+               style="background-color: #379226; 
+                      border: none;
+                      border-radius: 25px;
+                      padding: 12px 25px;
+                      transition: all 0.3s ease;
+                      font-size: 1.1rem;">
+                <i class="fas fa-plus-circle me-2"></i>Add New User
             </a>
         </div>
 
+        <!-- Add User Button -->
+        <div class="mb-5 p-3 rounded mt-5" style="background-color: #379226;">
+            <h1 class="text-center text-white mb-0">
+                <i class="fas fa-users me-2"></i>User Management
+            </h1>
+        </div>
         <!-- User List -->
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-hover align-middle">
+                <thead class="text-white" style="background-color: #379226;">
                     <tr>
-
-                        <th>image</th>
+                        <th class="rounded-start">Image</th>
                         <th>Email</th>
-                        <th>Roles</th>
-                        <th>adresse</th>
-                        <th>telephone</th>
-                        
+                        <th>Role</th>
+                        <th>Address</th>
+                        <th>Phone Number</th>
+                        <th class="rounded-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
-                        <tr>
+                        <tr class="clickable-row" 
+                                data-href="{{ path('app_user_show',{'id': user.id}) }}"
+                                style="cursor: pointer;" >
+                        
 
+                         
                             <td>
-
-                            {% if user.image %}
-
-                            <img src="{{asset('frontoffice/images/'~ user.image)}}" alt="User Image" class="rounded-circle" style="width:50px; height: 50px;">
-
-                            {% else %}
-
-                            <img src="{{asset('frontoffice/images/default.jpg')}}" alt="User Image" class="rounded-circle" style="width:50px; height: 50px;">
-                            
-         
-                            {% endif %}
-
+                                <div class="avatar-wrapper">
+                                    {% if user.image %}
+                                        <img src="{{ asset('frontoffice/images/' ~ user.image) }}" 
+                                             class="rounded-circle border-success" 
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        <img src="{{ asset('frontoffice/images/default.jpg') }}" 
+                                             class="rounded-circle border-success" 
+                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% endif %}
+                                </div>
                             </td>
-
-
-
-
                             <td>{{ user.email }}</td>
-
-
-
                             <td>{{ user.roles|join(', ') }}</td>
-
-
-
-                            <td>{{ user.adresse}}</td>
-
-
-
-
-                            <td>{{ user.telephone}}</td>
+                            <td>{{ user.adresse }}</td>
+                            <td>{{ user.telephone }}</td>
                             <td>
-                                <!-- Edit Button -->
-                                <a href="{{ path('admin_edit_user', {id: user.id}) }}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
+        <div class="d-flex gap-2">
+        <!-- Edit Button -->
+        <a href="{{ path('app_user_edit', {'id': user.id}) }}" 
+           class="btn btn-sm btn-success rounded-circle d-flex align-items-center justify-content-center" 
+           style="background-color: #379226; border: none; width: 35px; height: 35px;"
+           title="Edit">
+            <i class="fas fa-pen" style="color: white;"></i>
+        </a>
 
-                                <!-- Delete Button -->
-                                <form action="{{ path('admin_user_management', {id: user.id}) }}" method="post" class="d-inline">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </form>
-                            </td>
+        <!-- Delete Button -->
+        <form action="{{ path('app_user_delete', {'id': user.id}) }}" 
+              method="post" 
+              class="d-inline" 
+              onsubmit="return confirm('Are you sure you want to delete this user?');">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" 
+                    class="btn btn-sm btn-danger rounded-circle d-flex align-items-center justify-content-center" 
+                    style="background-color: #dc3545; border: none; width: 35px; height: 35px;"
+                    title="Delete">
+                <i class="fas fa-trash" style="color: white;"></i>
+            </button>
+        </form>
+    </div>
+</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -140,9 +130,36 @@
         </div>
     </div>
 
-
-
-
-
+    <style>
+        .avatar-wrapper {
+            width: 50px;
+            height: 50px;
+        }
+        .btn-success:hover {
+            background-color: #2d7b1f !important;
+        }
+        .btn-danger:hover {
+            background-color: #bb2d3b !important;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(55, 146, 38, 0.1);
+        }
+    </style>
 {% endblock %}
 
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle row clicks
+            $('.clickable-row').on('click', function(e) {
+                // Prevent navigation if the click is on the delete button
+                if ($(e.target).closest('button, a, input').length === 0) {
+                    window.location.href = $(this).data('href');
+                }
+            });
+        });
+    </script>
+{% endblock %}
