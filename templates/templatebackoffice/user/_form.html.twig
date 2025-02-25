@@ -1,0 +1,183 @@
+
+{{ form_start(form,{ 'attr':{'novalidate':'novalidate'} }) }}
+
+{# templatebackoffice/user/_form.html.twig #}
+
+<div class="form-container">
+    <div class="upload-wrapper">
+        <div class="image-upload-circle" onclick="document.getElementById('user_image').click();">
+            <div id="imagePreview" class="preview">
+                {% if user.image is not empty %}
+                    <img src="{{ asset('frontoffice/images/' ~ user.image) }}"
+                         alt="User Image"
+                         style="width:100%; height:100%; object-fit: cover;">
+                {% else %}
+                    <img src="{{ asset('frontoffice/images/default.jpg') }}"
+                         alt="Default Image"
+                         style="width:100%; height:100%; object-fit: cover;">
+                {% endif %}
+            </div>
+            {{ form_widget(form.image, {
+                'attr': {
+                    'id': 'user_image',
+                    'onchange': 'previewImage(this)'
+                }
+            }) }}
+        </div>
+    </div>
+
+
+    <div class="form-fields">
+        <div class="form-group">
+            {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            <small class="text-danger">{{ form_errors(form.email) }}</small>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.plainPassword, 'Password', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+            <small class="text-danger">{{ form_errors(form.plainPassword) }}</small>
+            
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.adresse, 'Adresse', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+            <small class="text-danger">{{ form_errors(form.adresse) }}</small>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.telephone, 'Telephone', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+            <small class="text-danger">{{ form_errors(form.telephone) }}</small>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.roles, 'Role', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.roles, {'attr': {'class': 'form-control'}}) }}
+            <small class="text-danger">{{ form_errors(form.roles) }}</small>
+        </div>
+
+        </div>
+        {# Add your other fields for password, adresse, telephone, roles, etc. #}
+
+    </div>
+
+    <div class="form-actions">
+        <button class="btn-submit" type="submit">
+            <i class="fas fa-user-check"></i> {{ button_label|default('Create User') }}
+        </button>
+    </div>
+
+</div>
+
+{{ form_end(form) }}
+
+<style>
+    /* Container styling */
+    .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+
+        background-color:rgb(213, 231, 221); /* light green background */
+        background-color: #e9f7ef; /* light green background */
+
+        border: 2px solid #97bc62;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+    /* Image Upload Circle */
+    .upload-wrapper {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .image-upload-circle {
+        width: 150px;
+        height: 150px;
+        border: 3px dashed #379226;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s, background-color 0.3s;
+        margin: 0 auto;
+    }
+    .image-upload-circle:hover {
+        border-color: #2d7b1f;
+        background-color: rgba(55, 146, 38, 0.1);
+    }
+    .image-upload-circle input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+    }
+    .preview {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #379226;
+        font-size: 3rem;
+    }
+    /* Form Fields */
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-label {
+        font-weight: bold;
+        color: #2c5f2d;
+        margin-bottom: 5px;
+        display: block;
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #97bc62;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    /* Submit Button */
+    .form-actions {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .btn-submit {
+        background-color: #379226;
+        color: #fff;
+        border: none;
+        padding: 12px 40px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn-submit:hover {
+        background-color: #2d7b1f;
+    }
+</style>
+
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('imagePreview');
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview Image" style="width:100%; height:100%; object-fit: cover;">`;
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+</script>
+

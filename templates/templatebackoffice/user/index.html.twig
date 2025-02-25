@@ -1,0 +1,154 @@
+{% extends 'templatebackoffice/base.html.twig' %}
+
+{% block title %}User Management{% endblock %}
+
+
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    /* Add cursor pointer for clickable rows */
+    .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .clickable-row:hover {
+        background-color: #f8f9fa !important;
+    }
+
+    /* Ensure action buttons have default cursor */
+    .clickable-row a,
+    .clickable-row button,
+    .clickable-row form {
+        cursor: pointer !important;
+    }
+
+    /* Prevent text selection on row click */
+    .clickable-row td {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+  
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container py-4">
+    <!-- Page Heading -->
+    <div class="row mb-4">
+    <div class="col-12 text-center">
+        <h2 class="mb-0 fw-bold">User Management</h2>
+    </div>
+
+    
+    <div class="col-12 d-flex justify-content-end mt-2">
+        <a href="{{ path('app_user_new') }}"
+           class="btn btn-success {{ _self.active_class('admin_user_management') }}"
+           style="border-radius: 20px;">
+            <i class="fas fa-plus-circle me-1"></i> Add New User
+        </a>
+    </div>
+</div>
+
+    <!-- User Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    <tr class="clickable-row"
+                                        data-href="{{ path('app_user_show', {'id': user.id}) }}">
+                                        <td>
+                                            {% if user.image %}
+                                                <img src="{{ asset('frontoffice/images/' ~ user.image) }}"
+                                                     class="rounded-circle border"
+                                                     style="width: 45px; height: 45px; object-fit: cover;">
+                                            {% else %}
+                                                <img src="{{ asset('frontoffice/images/default.jpg') }}"
+                                                     class="rounded-circle border"
+                                                     style="width: 45px; height: 45px; object-fit: cover;">
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.roles|join(', ') }}</td>
+                                        <td>{{ user.adresse }}</td>
+                                        <td>{{ user.telephone }}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <!-- Edit Button -->
+                                                <a href="{{ path('app_user_edit', {'id': user.id}) }}"
+                                                   class="btn btn-sm text-white"
+                                                   style="background-color: #379226;"
+                                                   title="Edit">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+
+                                                <!-- Delete Button -->
+                                                <form action="{{ path('app_user_delete', {'id': user.id}) }}"
+                                                      method="post"
+                                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-danger"
+                                                            title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div><!-- /.table-responsive -->
+                </div><!-- /.card-body -->
+            </div><!-- /.card -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container -->
+
+{{ parent() }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced click handler with better target detection
+        document.querySelectorAll('.clickable-row').forEach(row => {
+            row.addEventListener('click', function(e) {
+                // List of elements that should not trigger navigation
+                const ignoreElements = ['A', 'BUTTON', 'INPUT', 'FORM', 'I'];
+                const clickedElement = e.target.closest(ignoreElements.join(','));
+
+                // Only navigate if not clicking an interactive element
+                if (!clickedElement) {
+                    window.location.href = this.dataset.href;
+                }
+            });
+
+            // Add hover effect
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f1f1f1';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+    });
+</script>
+{% endblock %}

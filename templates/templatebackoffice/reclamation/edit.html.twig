@@ -1,0 +1,21 @@
+{% extends 'templatefrontoffice/annonce.html.twig' %}
+
+{% block title %}Edit Reclamation{% endblock %}
+
+{% block body %}
+
+<br>
+<br>
+
+    <div class="container section-title text-center" data-aos="fade-up">
+    <h2>Edit Reclamation</h2>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="100" style="min-height: 60vh;">
+    <div class="row w-100">
+        <div class="col-md-6 offset-md-3">
+            {{ include('reclamation/form.html.twig', {'formAction': path('app_reclamation_edit', {'id': reclamation.id})}) }}
+        </div>
+    </div>   
+</div> 
+{% endblock %}

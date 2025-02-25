@@ -1,0 +1,16 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute    
+user_dashboard:
+    path: /templatefrontoffice
+    controller: App\Controller\FrontHomeController::dashborad
+  
+admin_dashboard:
+    path: /templatebackoffice
+    controller: App\Controller\BackHomeController::dashborad
+   
+
+app_login_check:
+    path: /api/login      
