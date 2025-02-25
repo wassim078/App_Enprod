@@ -1,0 +1,75 @@
+{% extends 'templatebackoffice/index.html.twig' %}
+{% block title %}Modifier la Commande{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center">Modifier la Commande</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.clientName) }}
+                {{ form_widget(form.clientName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.clientFamilyName) }}
+                {{ form_widget(form.clientFamilyName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.clientAdresse) }}
+                {{ form_widget(form.clientAdresse, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.clientPhone) }}
+                {{ form_widget(form.clientPhone, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.methodePaiement) }}
+                {{ form_widget(form.methodePaiement, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.etatCommande) }}
+                {{ form_widget(form.etatCommande, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.prixtotal) }}
+                {{ form_widget(form.prixtotal, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="quantite" class="form-label">Quantité</label>
+                <input type="number" id="quantite" class="form-control quantite-field" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="totaleCommande" class="form-label">Total de la Commande</label>
+                <input type="text" id="totaleCommande" class="form-control" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+            {{ form_end(form) }}
+            <a href="{{ path('app_commande_index') }}" class="btn btn-secondary mt-3">Retour</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantiteField = document.querySelector('.quantite-field');
+        const totaleCommandeField = document.querySelector('#totaleCommande');
+
+        quantiteField.addEventListener('input', function() {
+            const quantite = parseFloat(quantiteField.value);
+            let totalCommande = 0;
+
+            // Calculer le total de la commande en parcourant les annonces associées
+            {% for annonce in annonces %}
+                totalCommande += parseFloat('{{ annonce.prix }}');
+            {% endfor %}
+
+            totaleCommandeField.value = (quantite * totalCommande).toFixed(2); // Affichage du total avec 2 décimales
+        });
+    });
+</script>
+{% endblock %}

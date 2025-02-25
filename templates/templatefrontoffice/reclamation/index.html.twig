@@ -1,48 +1,253 @@
-{% extends 'templatefrontoffice/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Post Reclamation{% endblock %}
 
-{% block active %}
+{% block stylesheet %}
+  <link rel="stylesheet" type="text/css" href="{{asset('frontoffice/css/bootstrap.css')}}" />
+
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <!-- nice select  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ==" crossorigin="anonymous" />
+  <!-- font awesome style -->
+  <link href="{{asset('frontoffice/css/font-awesome.min.css')}}" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="{{asset('frontoffice/css/style.css')}}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{{asset('frontoffice/css/responsive.css')}}" rel="stylesheet" />
+
+<style>
+/* Style général pour la section Contact */
+#contact {
+    padding: 60px 0;
+    background-color: #f8f9fa; /* Fond légèrement gris */
+}
+
+/* Style pour le titre de la section */
+.section-title h2 {
+    font-size: 32px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    position: relative;
+    color: #489050; /* Couleur bleue pour le titre */
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #489050; /* Ligne bleue sous le titre */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Style pour le sous-titre */
+.section-title h5 {
+    font-size: 18px;
+    color: #6c757d; /* Couleur grise pour le sous-titre */
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Style pour la grille */
+.row.gy-4 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacement entre les colonnes */
+}
+
+/* Style pour chaque colonne */
+.col-lg-6 {
+    flex: 1 1 45%; /* Flexibilité pour s'adapter à l'espace */
+    background: #ffffff; /* Fond blanc */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.col-lg-6:hover {
+    transform: translateY(-5px); /* Effet de levée au survol */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Style pour le titre "Vos Réclamations" */
+.col-lg-6 h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #489050; /* Couleur bleue */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Style pour le formulaire */
+#contact .col-lg-6 form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#contact .col-lg-6 form input,
+#contact .col-lg-6 form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+#contact .col-lg-6 form input:focus,
+#contact .col-lg-6 form textarea:focus {
+    border-color: #489050; /* Bordure bleue au focus */
+    outline: none;
+}
+
+#contact .col-lg-6 form button {
+    background-color: #489050; /* Bouton bleu */
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#contact .col-lg-6 form button:hover {
+    background-color: #489050; /* Bleu plus foncé au survol */
+}
+
+/* Style pour la liste des réclamations */
+#contact .col-lg-6 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#contact .col-lg-6 ul li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    color: #333;
+}
+
+#contact .col-lg-6 ul li:last-child {
+    border-bottom: none;
+}
+.header_section {
+  background-color: #489050 !important;
+  width: 100vw; /* Full viewport width */
+  position: relative; /* Ensure it stays in place */
+  z-index: 1000; /* Keep it above other elements */
+  padding: 15px 0;
+}
+
+.navbar {
+  background-color: #489050 !important; /* Ensure navbar inside header is also green */
+}
+.bg-box img {
+  display: none;
+}
+.hero_area {
+  position: relative;
+}
+
+.bg-box {
+  position: absolute;
+  top: 100px; /* Push it down so it doesn't cover the header */
+}
+
+
+  .custom-search {
+        width: 500px; /* Change the width as needed */
+    }
+
+    /* Change input border color when focused */
+    .custom-search:focus {
+        border-color: green !important; /* Change border color */
+        box-shadow: 0 0 5px rgba(18, 225, 18, 0.5) !important; /* Add green glow effect */
+    }
+
+.custom-search::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 16px;
+        width: 16px;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="green"><path d="M18 6.41L17.59 6 12 11.59 6.41 6 6 6.41 11.59 12 6 17.59 6.41 18 12 12.41 17.59 18 18 17.59 12.41 12z"/></svg>') no-repeat center;
+        background-size: contain;
+        cursor: pointer;
+    }
+
+
+.search-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        ; /* Full viewport height */
+    }
+
+</style>
+
+{% endblock %}
+
+{% block header %}
+  <!-- Header Section -->
+  <header class="header_section">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg custom_nav-container">
+        <a class="navbar-brand" href="/templatefrontoffice">
+          <img src="{{asset('frontoffice/images/logo_rounded.png')}}" alt="LiveCycle Logo" style="height: 55px; width: 55px; margin-right: 20px;">
+          <span>LiveCycle</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class=""></span>
+        </button>
+        {% block active %}
+        
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto">
             <li class="nav-item">
               <a class="nav-link" href="/templatefrontoffice">HOME </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/annonce">ANNONCE</a>
+              <a class="nav-link" href="{{ path('app_annonce') }}">SHOP</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
             </li>
+          
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
-            </li>
-            <li class="nav-item active">
               <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
             </li>
+
+             <li class="nav-item">
+              <a class="nav-link"  href="{{ path('app_commande_index') }}" >Commandes</a>
+            </li>
+
+
+           
           </ul>
-          
         </div>
+
         {% endblock %}
-
-
-
-
- 
+        
+        <div class="user_option">
+        
+            <a href="/login" class="order_online">
+              LOG IN
+            </a>
+          </div>
+      </nav>
+    </div>
+  </header>
+  {% endblock %}
+  
 {% block body %}
-  <section id="hero" class="hero">
-
-   <img src="{{ asset('front/img/reclamation_bg.png') }}" alt="" data-aos="fade-in">
-
-      <div class="container">
-        <div class="row">
-          
-        </div>
-      </div>
-
-</section>{# End Hero Section #}
-
-
 <section id="contact" class="contact">
       <div class="container section-title" data-aos="fade-up">
         
@@ -67,5 +272,9 @@
     </div>
     </div>
 </section>
+  
+
+
+
 {% endblock %}
 
