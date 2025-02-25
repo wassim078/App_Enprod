@@ -1,137 +1,51 @@
+
 {% block body %}
-  {% block css %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-      /* Boutons d'action en vert */
-      .btn-green {
-        background-color: #28a745 !important;
-        border-color: #28a745 !important;
-        color: #fff !important;
-      }
-      /* Optionnel : appliquer aux boutons custom si besoin */
-      .custom-btn {
-        background: linear-gradient(135deg, #28a745, #218838);
-        color: #fff !important;
-      }
-      /* Pour le bouton de suppression dans l'aperçu des fichiers */
-      .remove-file {
-        background: #28a745 !important;
-      }
-    </style>
-  {% endblock %}
-
-  <div class="container my-4">
-    <table class="table table-hover">
-      <thead class="table-light">
-        <tr>
-          <th>Sujet</th>
-          <th>Date de soumission</th>
-          <th>Suivi</th>
-         <!-- <th>Rapport</th> --!>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for rec in reclamation %}
-          <tr>
-            <td>{{ rec.sujet }}</td>
-            <td>{{ rec.date ? rec.date|date('Y-m-d') : '' }}</td>
-            <td>
-              {% if rec.etat == "En Attente" %}
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              {% elseif rec.etat == "En Cours" %}
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              {% elseif rec.etat == "Resolu" %}
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              {% endif %}
-            </td>
-            <!--  <td>
-              <a href="{{ path('rapport', {'reclamationId': rec.id}) }}" class="text-decoration-none">
-                <i class="fas fa-file-alt"></i>
-              </a>
-            </td> -->
-            <td>
-             
-              <a href="{{ path('app_reclamation_delete', {'id': rec.id}) }}" class="btn btn-success btn-sm me-2">
-                <i class="fas fa-trash-alt"></i>
-              </a>
-              <a href="{{ path('app_reclamation_edit', {'id': rec.id}) }}" class="btn btn-success btn-sm">
-                <i class="fas fa-edit"></i>
-              </a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const fileInput = document.querySelector("input[type='file']");
-        const filePreview = document.getElementById("file-preview");
-
-     
-        if (fileInput && filePreview) {
-          fileInput.addEventListener("change", function () {
-            filePreview.innerHTML = "";
-            Array.from(fileInput.files).forEach(file => {
-              const previewItem = document.createElement("div");
-              previewItem.className = "file-preview-item border rounded overflow-hidden position-relative m-2";
-              
-              const removeBtn = document.createElement("button");
-              removeBtn.className = "remove-file btn btn-sm position-absolute top-0 end-0 m-1";
-              removeBtn.innerHTML = "&times;";
-              
-              removeBtn.addEventListener("click", () => {
-                const newFiles = Array.from(fileInput.files).filter(f => f !== file);
-                const dataTransfer = new DataTransfer();
-                newFiles.forEach(f => dataTransfer.items.add(f));
-                fileInput.files = dataTransfer.files;
-                previewItem.remove();
-              });
-
-              if (file.type.startsWith("image/")) {
-                const img = document.createElement("img");
-                img.src = URL.createObjectURL(file);
-                img.className = "img-fluid";
-                previewItem.appendChild(img);
-              } else {
-                const fileName = document.createElement("p");
-                fileName.textContent = file.name;
-                fileName.className = "p-2 bg-light text-center m-0";
-                previewItem.appendChild(fileName);
-              }
-
-              previewItem.appendChild(removeBtn);
-              filePreview.appendChild(previewItem);
-            });
-          });
-        }
-
-       
-        const form = document.querySelector("form");
-        if (form) {
-          form.addEventListener("submit", function(e) {
-            const submitBtn = document.getElementById("submit-btn");
-            if (submitBtn) {
-              submitBtn.innerHTML = `
-                <span class="spinner-border spinner-border-sm" role="status"></span>
-                Envoi en cours...
-              `;
-              submitBtn.disabled = true;
-            }
-          });
-        }
-      });
-    </script>
-  {% endblock %}
+ {% block css %}
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   {% endblock %}
+    
+{% block reclamations %}
+  <table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Sujet</th>
+      <th>Date de soumission</th>
+      <th>Suivi</th>
+      
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rec in reclamation %}
+    <tr>
+      <td>{{ rec.sujet }}</td>
+      <td>{{ rec.date ? rec.date|date('Y-m-d') : '' }}</td>
+   {% if rec.etat == "En Attente" %}
+    <td>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </td>
+    {% elseif rec.etat == "En Cours" %}
+    <td>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </td>
+     {% elseif rec.etat == "Resolu" %}
+    <td>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </td>
+{% endif %}
+      <td><a href="{{ path('rapport', {'reclamationId': rec.id}) }}"><i class="fas fa-file-alt"></i></a></td>
+      <td>
+       <a href="{{ path('app_reclamation_delete', {'id': rec.id})}}"><i class="fas fa-trash-alt"></i></a>
+       <a href="{{ path('app_reclamation_edit', {'id': rec.id}) }}"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
 {% endblock %}

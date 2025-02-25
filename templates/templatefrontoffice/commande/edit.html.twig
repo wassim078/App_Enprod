@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Commande{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Styles généraux */
+        body {
+            background-color: #f4f7fc;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .title {
+            text-align: center;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Conteneur du formulaire */
+        .form-container {
+            width: 50%;
+            margin: auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Boutons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: all 0.3s ease-in-out;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn i {
+            font-size: 18px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Alignement des boutons au centre */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1 class="title">Modifier la Commande</h1>
+
+    <div class="form-container">
+        {{ include('templatefrontoffice/commande/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+        <div class="btn-container">
+            <a href="{{ path('app_commande_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+            <button type="submit" form="commande_form" class="btn btn-primary">
+                <i class="fas fa-save"></i> Mettre à jour
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Font Awesome pour les icônes -->
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+{% endblock %}

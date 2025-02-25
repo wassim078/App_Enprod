@@ -3,17 +3,39 @@
 namespace App\Repository;
 
 use App\Entity\Commande;
+use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Commande>
+ *
+ * @method Commande|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Commande|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Commande[]    findAll()
+ * @method Commande[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Commande::class);
+    }
+
+    public function findByProduit(Produit $produit): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.produits', 'p')
+            ->andWhere('p.id = :produit_id')
+            ->setParameter('produit_id', $produit->getId())
+            ->getQuery()
+            ->getResult();
+    }
+    public function findAllCommandes(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

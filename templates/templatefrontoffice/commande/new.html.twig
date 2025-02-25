@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+    /* Conteneur principal */
+    .containerC {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        
+    }
+
+    /* Conteneur du formulaire */
+    .form-container {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    /* Titre du formulaire */
+    .form-title {
+        font-size: 26px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+    }
+
+    /* Espacement et style des champs */
+    .form-wrapper .form-control {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: #f8f9fa;
+        transition: all 0.3s ease-in-out;
+        font-size: 16px;
+    }
+
+    /* Effet au focus */
+    .form-wrapper .form-control:focus {
+        border-color: #6a11cb;
+        box-shadow: 0px 0px 6px rgba(106, 17, 203, 0.4);
+        background: #ffffff;
+    }
+
+    /* Conteneur des boutons */
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+
+    /* Boutons */
+    .btn {
+        padding: 12px 22px;
+        font-size: 17px;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #6a11cb;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #4a0da2;
+        transform: translateY(-2px);
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+        border: none;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    /* Animation d'apparition */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Animation des boutons */
+    .btn-container .btn {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .btn-container .btn:hover {
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="containerC">
+    <div class="form-container"> 
+        <h1 class="form-title">Create new Commande</h1>
+        <div class="form-wrapper">
+            {{ include('templatefrontoffice/commande/_form.html.twig', {'attr': {'class': 'form-control'}}) }}
+            <br>
+            <div class="btn-container">
+                <a href="{{ path('app_commande_index') }}" class="btn btn-primary">Back to list</a>
+
+               <!-- <form action="/checkout" method="POST">
+                    <button type="submit" class="btn btn-success">Payer</button>
+                </form>--!>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector(".form-wrapper form");
+
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
+            const inputs = form.querySelectorAll(".form-control");
+
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add("is-invalid");
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+                        let errorMessage = document.createElement("div");
+                        errorMessage.textContent = "Ce champ est requis.";
+                        errorMessage.classList.add("error-message", "text-danger");
+                        input.parentNode.insertBefore(errorMessage, input.nextSibling);
+                    }
+                } else {
+                    input.classList.remove("is-invalid");
+                    if (input.nextElementSibling && input.nextElementSibling.classList.contains("error-message")) {
+                        input.nextElementSibling.remove();
+                    }
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+
+        document.querySelectorAll(".form-control").forEach(input => {
+            input.addEventListener("input", function () {
+                if (input.value.trim()) {
+                    input.classList.remove("is-invalid");
+                    if (input.nextElementSibling && input.nextElementSibling.classList.contains("error-message")) {
+                        input.nextElementSibling.remove();
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

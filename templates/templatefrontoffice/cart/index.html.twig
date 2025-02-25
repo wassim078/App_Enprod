@@ -1,0 +1,7 @@
+{% block title %}Hello CartController!{% endblock %}
+<br><br><br><br>
+{% block body %}
+{% for annonce in cart %}
+<h3>{{ annonce.titre }}</h3>
+{% endfor %}
+{% endblock %}

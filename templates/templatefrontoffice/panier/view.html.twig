@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+<br><br><br><br>
+  <div class="container">
+    <h1>Votre panier</h1>
+    {% if commandes is empty %}
+      <p>Votre panier est vide.</p>
+    {% else %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Annonce</th>
+            <th>Quantité</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for commande in commandes %}
+            <tr>
+              <td>{{ commande.annonce.titre }}</td>
+              <td>{{ commande.quantite }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    <a href="{{ path('app_annonce') }}" class="btn btn-primary">Continuer mes achats</a>
+    {# Ajoutez ici un bouton pour valider la commande, ou d'autres fonctionnalités supplémentaires #}
+  </div>
+{% endblock %}

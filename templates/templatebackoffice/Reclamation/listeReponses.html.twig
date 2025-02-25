@@ -1,4 +1,4 @@
-{% extends 'front/base.html.twig' %}
+{% extends 'templatebackoffice/index.html.twig' %}
 
 {% block title %}Les Réponses{% endblock %}
 
@@ -19,7 +19,7 @@
 
 <div class="col-lg-6 mx-auto row justify-content-center">
     <div class="col-lg-6 margin-bottom" style="margin-bottom: 20px;">
-        <a href="{{ path('app_reponse') }}" class="btn btn-primary">Revenir aux Réclamations</a>
+        <a href="{{ path('admin_reclamation_index') }}" class="btn btn-primary">Revenir aux Réclamations</a>
     </div> 
 
    <table class="table table-bordered">

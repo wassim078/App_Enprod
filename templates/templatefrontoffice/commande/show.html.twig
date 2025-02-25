@@ -1,0 +1,210 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        /* Styles généraux */
+        body {
+            background-color: #f4f7fc;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Conteneur de la table */
+        .table-container {
+            width: 85%;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Tableau */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: linear-gradient(135deg,rgb(255, 255, 255),rgb(255, 255, 255));
+            color:rgb(0, 0, 0);
+            text-align: left;
+            padding: 15px;
+            font-weight: bold;
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f9fbfc;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Effet au survol */
+        .table tbody tr:hover {
+            background-color: #eef3ff;
+            transition: 0.3s ease-in-out;
+        }
+
+        /* Conteneur des boutons */
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Boutons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: all 0.3s ease-in-out;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn i {
+            font-size: 18px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: #a71d2a;
+        }
+
+        /* Effet d'animation sur les boutons */
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mb-4">Détails de la Commande</h1>
+
+        <div class="table-container">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Id</th>
+                        <td>{{ commande.id }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Annonce Quantities</th>
+                        <td>{{ commande.annonceQuantities ? commande.annonceQuantities|json_encode : 'Non disponible' }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Méthode de Paiement</th>
+                        <td>{{ commande.methodePaiement }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">État de la Commande</th>
+                        <td>{{ commande.etatCommande }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date</th>
+                        <td>{{ commande.date ? commande.date|date('Y-m-d H:i:s') : 'Non spécifiée' }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Prix Total</th>
+                        <td><strong>{{ commande.prixtotal }} €</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="btn-container">
+                <a href="{{ path('app_commande_index') }}" class="btn btn-primary">
+                    <i class="fas fa-list"></i> Retour à la liste
+                </a>
+                <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+                <a href="{{ path('app_commande_delete', {'id': commande.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-trash"></i>Supprimer
+                </a>
+                <button class="btn btn-danger" id="delete-btn">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4 d-none" id="delete-form">
+            {{ include('templatefrontoffice/commande/_delete_form.html.twig', { 'commande': commande }) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Font Awesome pour les icônes -->
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let deleteButton = document.getElementById("delete-btn");
+            let deleteForm = document.getElementById("delete-form");
+
+            if (deleteButton) {
+                deleteButton.addEventListener("click", function () {
+                    Swal.fire({
+                        title: "🛑 Confirmation requise",
+                        text: "Voulez-vous vraiment supprimer cette commande ? Cette action est définitive.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#e63946",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Oui, supprimer 🚀",
+                        cancelButtonText: "Annuler ❌",
+                        reverseButtons: true,
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deleteForm.querySelector("form").submit();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
