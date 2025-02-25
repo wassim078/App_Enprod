@@ -1,0 +1,111 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+
+{% block title %}Post Index{% endblock %}
+
+{% block active %}
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice">HOME </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/annonce">SHOP</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
+            </li>
+          
+          </ul>
+          
+        </div>
+        {% endblock %}
+
+
+
+{% block body %}
+    <div class="container my-5">
+        <!-- Categorie Forum Information -->
+        <h1 class="text-center text-primary">{{ categorie_forum.name }}</h1>
+        <p class="text-center">{{ categorie_forum.description }}</p>
+
+        <br><br>
+
+        <!-- Create a Post Section -->
+        <h2 class="text-center text-secondary">Create a Post</h2>
+        <div class="text-center mt-4">
+            <a href="{{ path('app_post_index') }}" class="btn btn-success btn-lg">Go to Create Post Page</a>
+        </div>
+    </div>
+
+    {% block styles %}
+    <style>
+        /* General Styling */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        h1.text-center {
+            font-size: 2.5rem;
+            color: #007bff;
+        }
+
+        p {
+            font-family: 'Arial', sans-serif;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* Adding a little responsive touch */
+        @media (max-width: 768px) {
+            h1.text-center {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+    {% endblock %}
+{% endblock %}

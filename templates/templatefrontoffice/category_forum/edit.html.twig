@@ -1,0 +1,72 @@
+{% extends 'templatebackoffice/index.html.twig' %}
+
+{% block title %}Modifier la Catégorie{% endblock %}
+
+{% block body %}
+
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Titre */
+        .title {
+            color: #333;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Boutons */
+        .btn {
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg,rgb(22, 55, 3),rgb(11, 67, 11));
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+
+    <div class="container">
+    <br> <br> <br> <br> <br>
+        <h1 class="title">Modifier la Catégorie</h1>
+
+        {{ include('category_forum/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+        <a href="{{ path('app_category_forum_index') }}" class="btn btn-primary">Retour à la liste</a>
+
+        {{ include('category_forum/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}

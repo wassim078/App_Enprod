@@ -1,0 +1,67 @@
+{% extends 'templatebackoffice/index.html.twig' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-white text-center py-3" style="background-color: #1D6F42;">
+                    <h3>Edit Category</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Form Start -->
+                    {{ form_start(form) }}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">{{ form_label(form.name) }}</label>
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control shadow-sm border-success', 'placeholder': 'Enter category name'}}) }}
+                        <div class="invalid-feedback">{{ form_errors(form.name) }}</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100 mt-4 py-3 shadow-sm">Update Category</button>
+                    {{ form_end(form) }}
+
+                    <!-- Back and Delete buttons -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ path('app_templatebackoffice', { 'page': 'shop-management' })  }}" class="btn btn-secondary shadow-sm">Back to List</a>
+                        {{ include('category/_delete_form.html.twig', { 'button_class': 'btn btn-danger shadow-sm' }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Button Hover Effects */
+    .btn:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
+
+    /* Card Styling */
+    .card {
+        border-radius: 1rem;
+        border: 1px solid #1D6F42;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .card-header {
+        background-color: #1D6F42;
+    }
+
+    /* Form Input Focus Effects */
+    .form-control:focus {
+        border-color: #1D6F42;
+        box-shadow: 0 0 5px rgba(29, 111, 66, 0.5);
+    }
+
+    .form-control {
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}
