@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CollectRepository;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/templatefrontoffice/collect')]
 class CollectController extends AbstractController
@@ -22,6 +23,16 @@ class CollectController extends AbstractController
         return $this->render('templatefrontoffice/collect/index.html.twig', [
             'collects' => $collectRepository->findAll(),
         ]);
+    }
+
+    #[Route('/search', name: 'app_collect_index_search', methods: ['GET'])]
+    public function jsSearch(CollectRepository $collectRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $input = $_GET['query'] ?? '';
+        $data = $collectRepository->search($input);
+        $json = $serializer->serialize($data, 'json');
+
+        return new JsonResponse(data: $json, json: true);
     }
 
     
@@ -56,7 +67,7 @@ class CollectController extends AbstractController
             $entityManager->persist($collect);
             $entityManager->flush();
             $this->addFlash('success', 'Collection scheduled!');
-            return $this->redirectToRoute('app_collect_new');
+            return $this->redirectToRoute('app_collect_index');
         }
 
         return $this->render('templatefrontoffice/collect/collect.html.twig', [

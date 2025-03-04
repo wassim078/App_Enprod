@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategorieCollectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategorieCollectRepository::class)]
@@ -25,6 +26,7 @@ class CategorieCollect
      * @var Collection<int, Collect>
      */
     #[ORM\OneToMany(targetEntity: Collect::class, mappedBy: 'categorieCollect')]
+    #[Ignore]
     private Collection $collects;
 
     public function __construct()

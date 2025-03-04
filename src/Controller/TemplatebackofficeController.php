@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
+use App\Form\CollectType;
+
+
+
 
 final class TemplatebackofficeController extends AbstractController{
 
@@ -134,18 +138,61 @@ final class TemplatebackofficeController extends AbstractController{
 
 
                     //Collect-managements
-
-    #[Route('/templatebackoffice/collect-management', name: 'admin_collect_management')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function collectManagement(EntityManagerInterface $entityManager): Response
-    {
-        
-        $collects = $entityManager->getRepository(Collect::class)->findAll();
-
-        return $this->render('templatebackoffice/collect-management.html.twig', [
-            'collects' => $collects,
-        ]);
-    }
+                    #[Route('/templatebackoffice/collect-management', name: 'admin_collect_management')]
+                    #[IsGranted('ROLE_ADMIN')]
+                    public function collectManagement(EntityManagerInterface $entityManager): Response
+                    {
+                        // Fetch all Collect entities from the database
+                        $collects = $entityManager->getRepository(Collect::class)->findAll();
+                
+                        // Pass the collects data to the Twig template
+                        return $this->render('templatebackoffice/collect-management.html.twig', [
+                            'collects' => $collects,
+                        ]);
+                    }
+                
+                    /**
+                     * Edit a specific Collect entity.
+                     */
+                    #[Route('/templatebackoffice/collect/{id}/edit', name: 'admin_collect_edit')]
+                    #[IsGranted('ROLE_ADMIN')]
+                    public function edit(Request $request, EntityManagerInterface $entityManager, Collect $collect): Response
+                    {
+                        // Create the form and bind it to the existing Collect entity
+                        $form = $this->createForm(CollectType::class, $collect);
+                
+                        // Handle the submitted form data
+                        $form->handleRequest($request);
+                        if ($form->isSubmitted() && $form->isValid()) {
+                            $entityManager->flush(); // Persist the changes to the database
+                            $this->addFlash('success', 'Collect updated successfully.');
+                            return $this->redirectToRoute('admin_collect_management'); // Redirect back to the management page
+                        }
+                
+                        // Render the edit form template
+                        return $this->render('templatebackoffice/collect-edit.html.twig', [
+                            'form' => $form->createView(),
+                            'collect' => $collect,
+                        ]);
+                    }
+                
+                    /**
+                     * Delete a specific Collect entity.
+                     */
+                    #[Route('/templatebackoffice/collect/{id}/delete', name: 'admin_collect_delete', methods: ['POST'])]
+                    #[IsGranted('ROLE_ADMIN')]
+                    public function delete(Request $request, EntityManagerInterface $entityManager, Collect $collect): Response
+                    {
+                        // Ensure the request includes a valid CSRF token
+                        if ($this->isCsrfTokenValid('delete' . $collect->getId(), $request->request->get('_token'))) {
+                            $entityManager->remove($collect); // Remove the entity
+                            $entityManager->flush(); // Persist the deletion to the database
+                            $this->addFlash('success', 'Collect deleted successfully.');
+                        }
+                
+                        return $this->redirectToRoute('admin_collect_management'); // Redirect back to the management page
+                    }
+                    
 
 
 

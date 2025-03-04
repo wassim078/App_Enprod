@@ -25,7 +25,18 @@ class CollectRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
-
+    public function search(string $input)
+    {
+        return $this->createQueryBuilder('c')
+            ->addSelect('cc')
+            ->leftJoin('c.categorieCollect', 'cc')
+            ->where('c.titre LIKE :input')
+            ->orWhere('c.nomProduit LIKE :input')
+            ->orWhere('c.lieu LIKE :input')
+            ->orWhere('cc.nom LIKE :input')
+            ->setParameter('input', '%'.$input.'%')
+            ->getQuery()
+            ->getResult();
+    }
 
 }

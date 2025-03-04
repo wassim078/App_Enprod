@@ -1,3 +1,9 @@
+doctrine:
+    orm:
+        dql:
+            string_functions:
+                regexp: DoctrineExtensions\Query\Mysql\Regexp
+                
 when@dev:
     debug:
         # Forwards VarDumper Data clones to a centralized server allowing to inspect dumps on CLI or in your browser.

@@ -33,34 +33,6 @@
       </div>
     </div>
 
-    {# Steps (1, 2, 3) #}
-    <div class="row mb-5">
-      <div class="col-md-4">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Step 1</h5>
-            <p class="card-text">Schedule your waste collection.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Step 2</h5>
-            <p class="card-text">Choose pickup time and location.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Step 3</h5>
-            <p class="card-text">Track your collection status.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     {# Collection Request Form #}
     <div class="row justify-content-center">
       <div class="col-md-8">
@@ -68,74 +40,123 @@
           <div class="card-body">
             <h3 class="card-title mb-4">Schedule a Collection</h3>
             {{ form_start(collectForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+              <!-- Display global form errors -->
+              {% if form_errors(collectForm) %}
+                <div class="alert alert-danger">
+                  <ul>
+                    {% for error in form_errors(collectForm) %}
+                      <li>{{ error.message }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+
+              <!-- Title Field -->
               <div class="mb-3">
                 {{ form_label(collectForm.titre, 'Title', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(collectForm.titre, {'attr': {
-                  'class': 'form-control',
+                  'class': 'form-control' ~ (collectForm.titre.vars.errors|length > 0 ? ' is-invalid' : ''),
                   'minlength': 5,
                   'maxlength': 255,
                   'required': true
                 }}) }}
-                <div class="invalid-feedback">
-                  Please provide a valid title (5-255 characters).
-                </div>
+                <!-- Display field-specific errors -->
+                {% if collectForm.titre.vars.errors|length > 0 %}
+                  <div class="invalid-feedback">
+                    {% for error in collectForm.titre.vars.errors %}
+                      {{ error.message }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
+
+              <!-- Product Name Field -->
               <div class="mb-3">
                 {{ form_label(collectForm.nomProduit, 'Product Name', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(collectForm.nomProduit, {'attr': {
-                  'class': 'form-control',
+                  'class': 'form-control' ~ (collectForm.nomProduit.vars.errors|length > 0 ? ' is-invalid' : ''),
                   'minlength': 3,
                   'maxlength': 255,
                   'required': true
                 }}) }}
-                <div class="invalid-feedback">
-                  Please provide a valid product name (3-255 characters).
-                </div>
+                <!-- Display field-specific errors -->
+                {% if collectForm.nomProduit.vars.errors|length > 0 %}
+                  <div class="invalid-feedback">
+                    {% for error in collectForm.nomProduit.vars.errors %}
+                      {{ error.message }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
+
+              <!-- Quantity Field -->
               <div class="mb-3">
                 {{ form_label(collectForm.quantite, 'Quantity (kg)', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(collectForm.quantite, {'attr': {
-                  'class': 'form-control',
+                  'class': 'form-control' ~ (collectForm.quantite.vars.errors|length > 0 ? ' is-invalid' : ''),
                   'min': 1,
                   'required': true
                 }}) }}
-                <div class="invalid-feedback">
-                  Please provide a valid quantity (minimum 1 kg).
-                </div>
+                <!-- Display field-specific errors -->
+                {% if collectForm.quantite.vars.errors|length > 0 %}
+                  <div class="invalid-feedback">
+                    {% for error in collectForm.quantite.vars.errors %}
+                      {{ error.message }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
+
+              <!-- Location Field -->
               <div class="mb-3">
                 {{ form_label(collectForm.lieu, 'Location', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(collectForm.lieu, {'attr': {
-                  'class': 'form-control',
+                  'class': 'form-control' ~ (collectForm.lieu.vars.errors|length > 0 ? ' is-invalid' : ''),
                   'minlength': 5,
                   'maxlength': 255,
                   'required': true
                 }}) }}
-                <div class="invalid-feedback">
-                  Please provide a valid location (5-255 characters).
-                </div>
+                <div id="results"></div>
+                <!-- Display field-specific errors -->
+                {% if collectForm.lieu.vars.errors|length > 0 %}
+                  <div class="invalid-feedback">
+                    {% for error in collectForm.lieu.vars.errors %}
+                      {{ error.message }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
+
+              <!-- Start Date Field -->
               <div class="mb-3">
                 {{ form_label(collectForm.dateDebut, 'Start Date', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(collectForm.dateDebut, {'attr': {
-                  'class': 'form-control',
+                  'class': 'form-control' ~ (collectForm.dateDebut.vars.errors|length > 0 ? ' is-invalid' : ''),
                   'min': "now"|date('Y-m-d\TH:i'),
                   'required': true
                 }}) }}
-                <div class="invalid-feedback">
-                  Please provide a valid future date.
-                </div>
+                <!-- Display field-specific errors -->
+                {% if collectForm.dateDebut.vars.errors|length > 0 %}
+                  <div class="invalid-feedback">
+                    {% for error in collectForm.dateDebut.vars.errors %}
+                      {{ error.message }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
+
+              <!-- Category Field -->
               <div class="mb-3">
                 {{ form_label(collectForm.categorieCollect, 'Category', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(collectForm.categorieCollect, {'attr': {
-                  'class': 'form-select',
+                  'class': 'form-select' ~ (collectForm.categorieCollect.vars.errors|length > 0 ? ' is-invalid' : ''),
                   'required': true
                 }}) }}
                 <div class="invalid-feedback">
                   Please select a category.
                 </div>
               </div>
+              
               <button type="submit" class="btn btn-success w-100">Submit Request</button>
             {{ form_end(collectForm) }}
           </div>
@@ -145,9 +166,69 @@
   </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block footer %}
   {{ parent() }}
-  <script>
+  <style>
+    #results {
+        border: 1px solid #ddd;
+        max-width: 300px;
+        background: white;
+        position: absolute;
+    }
+    .address-item {
+        padding: 8px;
+        cursor: pointer;
+    }
+    .address-item:hover {
+        background: #f0f0f0;
+    }
+</style>
+<script>
+    $('#collect_lieu').on('keyup', function() {
+    const value = $('#collect_lieu').val();
+    
+    $.ajax({
+        url: 'https://api.geoapify.com/v1/geocode/autocomplete?apiKey=bf31799fe462456fa21727852c4652e0&format=json&type=city&text='+value,
+        method: 'GET', 
+        dataType: 'json',
+        success: function(data) {
+            console.log(data.results);
+            let resultsContainer = document.getElementById("results");
+                resultsContainer.innerHTML = ""; // Clear previous results
+
+                if (!data.results.length) {
+                    resultsContainer.innerHTML = "<p>No results found.</p>";
+                    return;
+                }
+
+                let list = "<ul>";
+                data.results.forEach(item => {
+                    let address = item.formatted;
+                    list += `<li class="address-item" data-address="${address}">${address}</li>`;
+                });
+                list += "</ul>";
+
+                resultsContainer.innerHTML = list;
+
+                document.querySelectorAll(".address-item").forEach(function (item) {
+                    item.addEventListener("click", function () {
+                      console.log(this.getAttribute("data-address"))
+                      let addressInput = document.getElementById("collect_lieu");
+                        addressInput.value = this.getAttribute("data-address");
+                        resultsContainer.innerHTML = ""; // Clear suggestions
+                    });
+                });
+        },
+        error: function(error) {
+            console.error('Error:', error);
+        }
+    });
+});    
+</script>
+
+
+</script>
+
     // Enable Bootstrap form validation
     (() => {
       'use strict';

@@ -23,7 +23,7 @@ class Collect
         minMessage: "The title must be at least {{ limit }} characters long.",
         maxMessage: "The title cannot be longer than {{ limit }} characters."
     )]
-    private string $titre;
+    private ?string $titre = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message: "The product name is required.")]
@@ -33,12 +33,12 @@ class Collect
         minMessage: "The product name must be at least {{ limit }} characters long.",
         maxMessage: "The product name cannot be longer than {{ limit }} characters."
     )]
-    private string $nomProduit;
+    private ?string $nomProduit= null;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank(message: "The quantity is required.")]
     #[Assert\Positive(message: "The quantity must be a positive number.")]
-    private int $quantite;
+    private ?int $quantite= null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message: "The location is required.")]
@@ -48,12 +48,12 @@ class Collect
         minMessage: "The location must be at least {{ limit }} characters long.",
         maxMessage: "The location cannot be longer than {{ limit }} characters."
     )]
-    private string $lieu;
+    private ?string $lieu= null;
 
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank(message: "The date is required.")]
     #[Assert\GreaterThan("today", message: "The date must be in the future.")]
-    private \DateTimeInterface $dateDebut;
+    private ?\DateTimeInterface $dateDebut= null;
 
 
     #[ORM\ManyToOne(targetEntity: CategorieCollect::class, inversedBy: 'collects')]
@@ -73,7 +73,7 @@ class Collect
         return $this->titre;
     }
 
-    public function setTitre(string $titre): static
+    public function setTitre(?string $titre): static
     {
         $this->titre = $titre;
 
@@ -85,7 +85,7 @@ class Collect
         return $this->nomProduit;
     }
 
-    public function setNomProduit(string $nomProduit): static
+    public function setNomProduit(?string $nomProduit): static
     {
         $this->nomProduit = $nomProduit;
 
@@ -97,7 +97,7 @@ class Collect
         return $this->quantite;
     }
 
-    public function setQuantite(float $quantite): static
+    public function setQuantite(?float $quantite): static
     {
         $this->quantite = $quantite;
 
@@ -109,7 +109,7 @@ class Collect
         return $this->lieu;
     }
 
-    public function setLieu(string $lieu): static
+    public function setLieu(?string $lieu): static
     {
         $this->lieu = $lieu;
 
@@ -121,7 +121,7 @@ class Collect
         return $this->dateDebut;
     }
 
-    public function setDateDebut(\DateTimeInterface $dateDebut): static
+    public function setDateDebut(?\DateTimeInterface $dateDebut): static
     {
         $this->dateDebut = $dateDebut;
 

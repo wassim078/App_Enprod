@@ -61,17 +61,26 @@
 
 {% block body %}
   <div class="container mt-5">
+  <div class="d-flex justify-content-between">
     <h1>All Collections</h1>
-    <div class="row">
+    <div>
+      <input placeholder="Search" id="searchText"/>
+      <button id="jqueryButton">Search</button>
+    </div>
+    <a href="{{ path('app_collect_new') }}" class="btn btn-success">
+                Schedule New Collection
+    </a>
+  </div>
+
+    <div class="row m-2" id="container">
       {% for collect in collects %}
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ collect.titre }}</h5>
-              <p class="card-text">{{ collect.nomProduit }}</p>
-              <a href="{{ path('app_collect_new') }}" class="btn btn-success">
-                Schedule New Collection
-              </a>
+              <h5 class="card-title">Titre: {{ collect.titre }}</h5>
+              <p class="card-text">Nom: {{ collect.nomProduit }}</p>
+              <p class="card-text">Categorie: {{ collect.categorieCollect.nom }}</p>
+              <p class="card-text">Lieu: {{ collect.lieu }}</p>
             </div>
           </div>
         </div>
@@ -80,4 +89,50 @@
   </div>
 {% endblock %}
 {% block footer %}
+{{ parent() }}
+  <script>
+  $('#jqueryButton').on('click', function() {
+    const value = $('#searchText').val();
+    
+    $.ajax({
+        url: 'search?query='+value,
+        method: 'GET', 
+        dataType: 'json',
+        success: function(data) {
+            console.log(typeof data);
+
+            let resultsContainer = $('#container');
+                resultsContainer.empty();
+
+                if (data.length === 0) {
+                    resultsContainer.html('<p>No results found.</p>');
+                    return;
+                }
+
+                let list = "";
+                data.forEach(item => {
+                    list += `<div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Titre: ${item.titre}</h5>
+              <p class="card-text">Nom: ${item.nomProduit}</p>
+              <p class="card-text">Categorie: ${item.categorieCollect.nom}</p>
+              <p class="card-text">Lieu: ${item.lieu}</p>
+            </div>
+          </div>
+        </div>`;
+                });
+                resultsContainer.html(list);
+        },
+        error: function(error) {
+            console.error('Error:', error);
+            alert('AJAX request failed!');
+        }
+    });
+});
+  </script>
+{% endblock %}
+
+{% block javascripts %}
+
 {% endblock %}

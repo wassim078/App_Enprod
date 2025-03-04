@@ -57,8 +57,47 @@
 
 
 {% block body %}
+    <h1>Collect Management</h1>
 
+    {% if collects|length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Product Name</th>
+                    <th>Quantity (kg)</th>
+                    <th>Location</th>
+                    <th>Start Date</th>
+                    <th>Category</th>
+                    <th>Actions</th> <!-- New column for Edit and Delete buttons -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for collect in collects %}
+                    <tr>
+                        <td>{{ collect.titre }}</td>
+                        <td>{{ collect.nomProduit }}</td>
+                        <td>{{ collect.quantite }}</td>
+                        <td>{{ collect.lieu }}</td>
+                        <td>{{ collect.dateDebut|date('Y-m-d H:i:s') }}</td>
+                        <td>
+                            {{ collect.categorieCollect ? collect.categorieCollect.nom : 'No Category' }}
+                        </td>
+                        <td>
+                            <!-- Edit Button -->
+                            <a href="{{ path('admin_collect_edit', { 'id': collect.id }) }}" class="btn btn-primary btn-sm">Edit</a>
 
-
-
+                            <!-- Delete Button -->
+                            <form method="POST" action="{{ path('admin_collect_delete', { 'id': collect.id }) }}" onsubmit="return confirm('Are you sure you want to delete this collect?')" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ collect.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No collects available.</p>
+    {% endif %}
 {% endblock %}
