@@ -1,0 +1,64 @@
+
+{% block stylesheets %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Collects List</title>
+    </head>
+    <body>
+        <h1>Collects List</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Product Name</th>
+                    <th>Quantity (kg)</th>
+                    <th>Location</th>
+                    <th>Start Date</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for collect in collects %}
+                    <tr>
+                        <td>{{ collect.titre }}</td>
+                        <td>{{ collect.nomProduit }}</td>
+                        <td>{{ collect.quantite }}</td>
+                        <td>{{ collect.lieu }}</td>
+                        <td>{{ collect.dateDebut|date('Y-m-d H:i:s') }}</td>
+                        <td>
+                            {{ collect.categorieCollect ? collect.categorieCollect.nom : 'No Category' }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+    </html>
+{% endblock %}

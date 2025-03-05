@@ -60,6 +60,7 @@
 
 
 {% block body %}
+
   <div class="container mt-5">
   <div class="d-flex justify-content-between">
     <h1>All Collections</h1>
@@ -87,6 +88,44 @@
       {% endfor %}
     </div>
   </div>
+   <div class="container my-5">
+        <h1>Collect Management</h1>
+
+        <!-- Add the Generate PDF Button -->
+        <a href="{{ path('collects_to_pdf') }}" class="btn btn-success mb-3">Generate PDF</a>
+
+        {% if collects|length > 0 %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Product Name</th>
+                        <th>Quantity (kg)</th>
+                        <th>Location</th>
+                        <th>Start Date</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for collect in collects %}
+                        <tr>
+                            <td>{{ collect.titre }}</td>
+                            <td>{{ collect.nomProduit }}</td>
+                            <td>{{ collect.quantite }}</td>
+                            <td>{{ collect.lieu }}</td>
+                            <td>{{ collect.dateDebut|date('Y-m-d H:i:s') }}</td>
+                            <td>
+                                {{ collect.categorieCollect ? collect.categorieCollect.nom : 'No Category' }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No collects available.</p>
+        {% endif %}
+    </div>
+
 {% endblock %}
 {% block footer %}
 {{ parent() }}
@@ -136,3 +175,14 @@
 {% block javascripts %}
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+   

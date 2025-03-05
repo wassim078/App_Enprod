@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controller;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Collect;
 use App\Form\CollectType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -112,6 +113,44 @@ class CollectController extends AbstractController
 
         return $this->redirectToRoute('app_collect_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+
+
+
+#[Route('/templatefrontoffice/collect/pdf', name: 'collects_to_pdf')]
+public function generatePdf(EntityManagerInterface $entityManager): Response
+{
+    // Fetch all Collect entities from the database
+    $collects = $entityManager->getRepository(Collect::class)->findAll();
+
+    // Render the Twig template as HTML
+    $html = $this->renderView('templatefrontoffice/collect/pdf.html.twig', [
+        'collects' => $collects,
+    ]);
+
+    // Initialize Dompdf
+    $options = new Options();
+    $options->set('isRemoteEnabled', true); // Enable remote images if needed
+    $dompdf = new Dompdf($options);
+
+    // Load the HTML content
+    $dompdf->loadHtml($html);
+
+    // Set paper size and orientation
+    $dompdf->setPaper('A4', 'portrait');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF to the browser
+    $response = new Response($dompdf->output());
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'inline; filename="collects_list.pdf"');
+
+    return $response;
+}
  
     
 }
