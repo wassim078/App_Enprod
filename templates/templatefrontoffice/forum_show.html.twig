@@ -36,9 +36,9 @@
         <h2 class="text-center text-secondary">Posts</h2>
 
         <div id="post-results">
-            {% if posts is not empty %}
+            {% if pagination is not empty %}
                 <div class="list-group">
-                    {% for post in posts %}
+                    {% for post in pagination %}
                         <div class="list-group-item">
                             <h5>{{ post.title }}</h5>
                             <p>{{ post.contenu|slice(0, 100) }}...</p>
@@ -107,10 +107,32 @@
                 <p class="text-center text-muted">Aucun post trouvé.</p>
             {% endif %}
         </div>
+  <div class="pagination">
+    <ul class="pagination">
+        <!-- Bouton "Previous" -->
+        <li class="page-item {% if pagination.currentPageNumber == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('app_forum_show', {'id': id, 'page': pagination.currentPageNumber - 1}) }}">Previous</a>
+        </li>
+
+        <!-- Liens des pages -->
+        {% for page in 1..pagination.pageCount %}
+            <li class="page-item {% if pagination.currentPageNumber == page %}active{% endif %}">
+                <a class="page-link" href="{{ path('app_forum_show', {'id': id, 'page': page}) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+
+        <!-- Bouton "Next" -->
+        <li class="page-item {% if pagination.currentPageNumber == pagination.pageCount %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('app_forum_show', {'id': id, 'page': pagination.currentPageNumber + 1}) }}">Next</a>
+        </li>
+    </ul>
+</div>
     {% else %}
         <p class="text-center text-danger">Forum non trouvé.</p>
     {% endif %}
 </div>
+
+
 
 {% block styles %}
 <style>
@@ -284,7 +306,6 @@
         });
     });
 </script>
-   
-
+       
 {% endblock %}
 {% endblock %}

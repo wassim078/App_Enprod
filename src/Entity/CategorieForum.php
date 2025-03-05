@@ -98,5 +98,15 @@ class CategorieForum
             }
         }
         return $this;
+ 
+ 
     }
+    // Dans ton entité CategorieForum
+public function getPostsQueryBuilder()
+{
+    return $this->createQueryBuilder('p')
+        ->where('p.categorie = :categorie')
+        ->setParameter('categorie', $this);
+}
+
 }

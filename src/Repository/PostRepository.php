@@ -40,4 +40,28 @@ class PostRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+
+// src/Repository/PostRepository.php
+
+public function findByCategorieForum(CategorieForum $categorieForum)
+{
+    return $this->createQueryBuilder('p')
+        ->where('p.categorie = :categorie')
+        ->setParameter('categorie', $categorieForum)
+        ->orderBy('p.createdAt', 'DESC')
+        ->getQuery();
+}
+public function findByCategorieForumId(int $categorieForumId): array
+{
+    return $this->createQueryBuilder('p')
+        ->andWhere('p.categorieForum = :categorieForumId')
+        ->setParameter('categorieForumId', $categorieForumId)
+        ->orderBy('p.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+
+
 }

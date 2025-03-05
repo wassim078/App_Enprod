@@ -4,20 +4,16 @@ namespace App\Controller;
 use App\Repository\CategorieForumRepository;
 use App\Repository\PostRepository;
 use App\Repository\CommentaireRepository;
-
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Forum;
 use App\Entity\Post;
 use App\Entity\Commentaire;
-
 use App\Form\PostType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
-
-final class ListController extends AbstractController
+use Knp\Component\Pager\PaginatorInterface;final class ListController extends AbstractController
 {
     #[Route('/templatefrontoffice/forum', name: 'app_list')]
     public function index(CategorieForumRepository $categorieForumRepository): Response
@@ -55,10 +51,17 @@ final class ListController extends AbstractController
         $this->addFlash('success', 'Commentaire ajouté avec succès.');
         return $this->redirectToRoute('app_forum_show', ['id' => $post->getcategorieForum()->getId()]);
     }
+    
     #[Route('/templatefrontoffice/forum/{id}', name: 'app_forum_show')]
-    public function show(int $id, CategorieForumRepository $categorieForumRepository): Response
-    {
-        // Récupérer la catégorie de forum via son ID
+    public function show(
+        int $id,
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginator,
+        Request $request,
+        CategorieForumRepository $categorieForumRepository
+
+    ): Response {
+        // Récupérer la catégorie de forum directement via l'EntityManager
         $categorieForum = $categorieForumRepository->find($id);
     
         if (!$categorieForum) {
@@ -66,7 +69,15 @@ final class ListController extends AbstractController
         }
     
         // Récupérer les posts associés à cette catégorie
-        $posts = $categorieForum->getPosts();
+        $postsQuery = $categorieForum->getPosts();
+        $posts= $categorieForum->getPosts();
+
+        // Paginer les posts
+        $pagination = $paginator->paginate(
+            $postsQuery, // Requête contenant les posts
+            $request->query->getInt('page', 1), // Numéro de la page
+            2// Nombre d'éléments par page
+        );
     
         // Lire le fichier JSON des moyennes
         $filePath = '../public/rating.json';
@@ -74,7 +85,7 @@ final class ListController extends AbstractController
     
         // Associer chaque post avec sa moyenne
         $postRatings = [];
-        foreach ($posts as $post) {
+        foreach ($pagination as $post) {
             $postId = $post->getId();
             $postRatings[$postId] = $ratings[$postId]['average'] ?? null; // Met null si pas de moyenne
         }
@@ -93,9 +104,12 @@ final class ListController extends AbstractController
     
         return $this->render('templatefrontoffice/forum_show.html.twig', [
             'categorie_forum' => $categorieForum,
-            'posts' => $posts,
+            'pagination' => $pagination,
+            'posts' => $pagination,
+
             'id' => $id,
             'moyenne' => $postRatings,
             'post_with_most_comments' => $postWithMostComments, // Passer le post avec le plus de commentaires
         ]);
-    }}
+    }
+    }

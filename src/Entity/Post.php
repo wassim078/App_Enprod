@@ -53,32 +53,17 @@ class Post
     #[Assert\NotNull(message: "Le post doit être associé à un utilisateur.")]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: CategorieForum::class, inversedBy: 'posts')]
-#[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'id')]
-private ?CategorieForum $forum = null;
-
-
-public function getForum(): ?CategorieForum
-{
-    return $this->forum;
-}
-
-public function setForum(?CategorieForum $forum): static
-{
-    $this->forum = $forum;
-    return $this;
-}
-
-
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'post')]
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'post', cascade: ['persist', 'remove'])]
     private Collection $commentaires;
 
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
