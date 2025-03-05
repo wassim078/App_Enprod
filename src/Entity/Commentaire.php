@@ -29,6 +29,35 @@ class Commentaire
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
     private ?User $user = null;
 
+    #[ORM\Column(type: 'integer', nullable: true, options: ['default' => 0])]
+    private ?int $likesCount = 0;
+
+    #[ORM\Column(type: 'integer', nullable: true, options: ['default' => 0])]
+    private ?int $dislikesCount = 0;
+
+    // Getters et setters
+    public function getLikesCount(): ?int
+    {
+        return $this->likesCount;
+    }
+
+    public function setLikesCount(?int $likesCount): self
+    {
+        $this->likesCount = $likesCount;
+        return $this;
+    }
+
+    public function getDislikesCount(): ?int
+    {
+        return $this->dislikesCount;
+    }
+
+    public function setDislikesCount(?int $dislikesCount): self
+    {
+        $this->dislikesCount = $dislikesCount;
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

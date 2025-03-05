@@ -20,8 +20,8 @@ class CategorieForum
     #[Assert\Length(
         min: 3,
         max: 255,
-        minMessage: "Le nom doit contenir au moins {{ limit }} caractères.",
-        maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères."
+        minMessage: "Le nom doit contenir au moins 3 caractères.",
+        maxMessage: "Le nom ne doit pas dépasser 255 caractères."
     )]
     private ?string $name = null;
 
@@ -30,20 +30,20 @@ class CategorieForum
     #[Assert\Length(
         min: 10,
         max: 255,
-        minMessage: "La description doit contenir au moins {{ limit }} caractères.",
-        maxMessage: "La description ne doit pas dépasser {{ limit }} caractères."
+        minMessage: "La description doit contenir au moins 10 caractères.",
+        maxMessage: "La description ne doit pas dépasser 255 caractères."
     )]
     private ?string $description = null;
 
     /**
-     * @var Collection<int, Forum>
+     * @var Collection<int, Post>
      */
-    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'categorieForum')]
-    private Collection $forums;
+    #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'categorieForum')]
+    private Collection $posts;
 
     public function __construct()
     {
-        $this->forums = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,31 +74,29 @@ class CategorieForum
     }
 
     /**
-     * @return Collection<int, Forum>
+     * @return Collection<int, Post>
      */
-    public function getForums(): Collection
+    public function getPosts(): Collection
     {
-        return $this->forums;
+        return $this->posts;
     }
 
-    public function addForum(Forum $forum): static
+    public function addPost(Post $post): static
     {
-        if (!$this->forums->contains($forum)) {
-            $this->forums->add($forum);
-            $forum->setCategorieForum($this);
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setCategorieForum($this);
         }
-
         return $this;
     }
 
-    public function removeForum(Forum $forum): static
+    public function removePost(Post $post): static
     {
-        if ($this->forums->removeElement($forum)) {
-            if ($forum->getCategorieForum() === $this) {
-                $forum->setCategorieForum(null);
+        if ($this->posts->removeElement($post)) {
+            if ($post->getCategorieForum() === $this) {
+                $post->setCategorieForum(null);
             }
         }
-
         return $this;
     }
 }

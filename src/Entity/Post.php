@@ -45,13 +45,30 @@ class Post
     #[Assert\Type(type: \DateTimeInterface::class, message: "La date de mise à jour doit être valide.")]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
-    #[Assert\NotNull(message: "Le post doit être associé à un forum.")]
-    private ?Forum $forum = null;
+    #[ORM\ManyToOne(targetEntity: CategorieForum::class, inversedBy: 'posts')]
+    #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'id')]
+    private ?CategorieForum $categorieForum = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[Assert\NotNull(message: "Le post doit être associé à un utilisateur.")]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: CategorieForum::class, inversedBy: 'posts')]
+#[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'id')]
+private ?CategorieForum $forum = null;
+
+
+public function getForum(): ?CategorieForum
+{
+    return $this->forum;
+}
+
+public function setForum(?CategorieForum $forum): static
+{
+    $this->forum = $forum;
+    return $this;
+}
+
 
     /**
      * @var Collection<int, Commentaire>
@@ -113,14 +130,14 @@ class Post
         return $this;
     }
 
-    public function getForum(): ?Forum
+    public function getCategorieForum(): ?CategorieForum
     {
-        return $this->forum;
+        return $this->categorieForum;
     }
 
-    public function setForum(?Forum $forum): static
+    public function setCategorieForum(?CategorieForum $categorieForum): static
     {
-        $this->forum = $forum;
+        $this->categorieForum = $categorieForum;
         return $this;
     }
 

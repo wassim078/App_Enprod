@@ -1,0 +1,23 @@
+{% if posts is not empty %}
+    <div class="list-group">
+        {% for post in posts %}
+            <div class="list-group-item">
+                <h5>{{ post.title }}</h5>
+                <p>{{ post.contenu|slice(0, 100) }}...</p>
+                <small>Posté le {{ post.createdAt|date('Y-m-d') }} par {{ post.user.id }}</small>
+
+                <!-- Affichage de la note -->
+                <div class="rating" data-post-id="{{ post.id }}" data-user-id="{{ post.user.id }}">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+                <p id="average-rating-{{ post.id }}{{ post.user.id }}">Moyenne : {{ moyenne[post.id] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-center text-muted">Aucun post trouvé.</p>
+{% endif %}

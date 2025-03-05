@@ -2,13 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Forum;
+use App\Entity\CategorieForum;
 use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 class Post1Type extends AbstractType
 {
@@ -23,13 +24,10 @@ class Post1Type extends AbstractType
             ->add('updatedAt', null, [
                 'widget' => 'single_text'
             ])
-            ->add('forum', EntityType::class, [
-                'class' => Forum::class,
-'choice_label' => 'id',
-            ])
+           
             ->add('user', EntityType::class, [
                 'class' => User::class,
-'choice_label' => 'id',
+'choice_label' => 'id',   
             ])
         ;
     }

@@ -23,109 +23,120 @@
 {% endblock %}
 
 {% block body %}
-    <!-- Enter your code -->
-    {% block styles %}
+    <title>CategorieForum</title>
+
     <style>
-        /* Style de la page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
         h1 {
             text-align: center;
+            color: #333;
             margin-bottom: 40px;
-            color: #007bff;
-            font-family: 'Arial', sans-serif;
-            font-size: 2.5rem;
         }
 
-        .table {
-            width: 100%;
-            margin: 0 auto;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        .card-deck {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 300px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
             background-color: #fff;
-            margin-top: 20px;
         }
 
-        .table th, .table td {
-            text-align: center;
-            padding: 12px;
-            font-size: 16px;
-            font-family: 'Arial', sans-serif;
+        .card:hover {
+            transform: translateY(-10px);
         }
 
-        .table th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-            cursor: pointer;
-        }
-
-        .btn {
-            padding: 8px 15px;
-            font-size: 14px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px;
-        }
-
-        .btn-success {
+        .card-header {
             background-color: #28a745;
             color: white;
-            border: none;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
         }
 
-        .btn-success:hover {
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+        }
+
+        .btn-enter {
+            display: inline-block;
+            padding: 8px 20px;
+            color: white;
+            background-color: #28a745;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-enter:hover {
             background-color: #218838;
         }
 
-        .table tbody tr td a {
-            text-decoration: none;
+        .image-container {
+            text-align: center;
+            margin-top: 30px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .table th, .table td {
-                font-size: 14px;
-                padding: 10px;
-            }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
-    {% endblock %}
 
-    <h1>CategorieForum </h1>
+    <div class="container">
+        <h1>Categorie Forum</h1>
+        <div class="card-deck">
+            {% for categorie_forum in categorie_forums %}
+                <div class="card">
+                    <div class="card-header">
+                        Forum - {{ categorie_forum.name }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ categorie_forum.name }}</h5>
+                        <p class="card-text">{{ categorie_forum.description }}</p>
+                        <a href="{{ path('app_forum_show', {'id': categorie_forum.id}) }}" class="btn-enter">Enter Forum</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card" style="width: 100%; text-align: center;">
+                    <div class="card-body">
+                        <p>No forums available at the moment.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for categorie_forum in categorie_forums %}
-            <tr>
-                <td>{{ categorie_forum.id }}</td>
-                <td>{{ categorie_forum.name }}</td>
-                <td>{{ categorie_forum.description }}</td>
-                <td>
-                    <!-- Ajout du bouton d'entrée -->
-                    <a href="{{ path('app_forum_show', {'id': categorie_forum.id}) }}" class="btn btn-success">Enter Forum</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">No records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="image-container">
+            <img src="{{ asset('frontoffice/images/image.png') }}" alt="Image illustrative">
+        </div>
+    </div>
 {% endblock %}
