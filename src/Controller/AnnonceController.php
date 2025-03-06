@@ -12,17 +12,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Knp\Component\Pager\PaginatorInterface;
 
-#[Route('/annonce')]
+#[Route('/annonce')]  
 final class AnnonceController extends AbstractController
 {
     #[Route(name: 'app_annonce_index', methods: ['GET'])]
-    public function index(AnnonceRepository $annonceRepository): Response
+    public function index(PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $this->getDoctrine()->getRepository(Annonce::class)->createQueryBuilder('a');
+    
+        $pagination = $paginator->paginate(
+            $query, // La requête
+            $request->query->getInt('page', 1), // Numéro de page, 1 par défaut
+            6 // Nombre d'annonces par page
+        );
+    
         return $this->render('annonce/index.html.twig', [
-            'annonces' => $annonceRepository->findAll(),
+            'annonces' => $pagination,
         ]);
     }
+
 
     #[Route('/new', name: 'app_annonce_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -132,4 +142,6 @@ final class AnnonceController extends AbstractController
 
         return $this->redirectToRoute('app_templatebackoffice', ['page' => 'shop-management'], Response::HTTP_SEE_OTHER);
     }
+
+    
 }

@@ -1,4 +1,3 @@
-
 {% block title %}Annonce Index{% endblock %}
 
 {% block body %}
@@ -25,13 +24,13 @@
                         <td>{{ annonce.poids }}</td>
                         <td>{{ annonce.prix }}</td>
                         <td>{{ annonce.description }}</td>
-                  <td >
-                      {% if annonce.image %}
-                          <img src="{{ asset('uploads/' ~ annonce.image) }}" alt="Image de l'annonce" class="img-thumbnail" style="width: 80px; height: auto;">
-                      {% else %}
-                          <img src="{{ asset('assetsFront/assets/img/default-annonce.jpg') }}" alt="Image par défaut" class="img-thumbnail" style="width: 80px; height: auto;">
-                      {% endif %}
-                  </td>
+                        <td>
+                            {% if annonce.image %}
+                                <img src="{{ asset('uploads/' ~ annonce.image) }}" alt="Image de l'annonce" class="img-thumbnail" style="width: 80px; height: auto;">
+                            {% else %}
+                                <img src="{{ asset('assetsFront/assets/img/default-annonce.jpg') }}" alt="Image par défaut" class="img-thumbnail" style="width: 80px; height: auto;">
+                            {% endif %}
+                        </td>
                         <td>
                             <a href="{{ path('app_annonce_show', {'id': annonce.id}) }}" class="btn btn-info btn-sm">Show</a>
                             <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -44,6 +43,9 @@
                 {% endfor %}
             </tbody>
         </table>
+
+      
+        
 
         <div class="mt-4">
             <a href="{{ path('app_annonce_new') }}" class="btn btn-success">Create New Annonce</a>
