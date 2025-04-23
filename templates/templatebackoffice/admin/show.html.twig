@@ -1,0 +1,112 @@
+{% extends 'templatebackoffice/base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block content %}
+    <div class="container" style="max-width: 800px; margin: 40px auto; padding: 25px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgb(77, 172, 40);">
+        <h1 style="color: rgb(77, 172, 40); border-bottom: 4px solid rgb(77, 172, 40);; padding-bottom: 12px; margin-bottom: 35px; font-size: 26px; font-weight: bold;">
+            <i class="fas fa-user" style="margin-right: 12px; color:rgb(77, 172, 40);"></i>
+            Admin Profile
+        </h1>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="{{ asset('frontoffice/images/admin.jpg')}}" 
+                 alt="User Image" 
+                 style="width: 180px; height: 180px; border-radius: 50%; border: 4px solid #1d3b53; object-fit: cover; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);">
+        </div>
+
+        <table class="table" style="border-radius: 10px; overflow: hidden;">
+            <tbody>
+                <tr style="background-color: #f3f6f9;">
+                    <th class="table-header">Email</th>
+                    <td class="table-data">{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th class="table-header">Roles</th>
+                    <td class="table-data">{{ user.roles ? user.roles|join(', ') : '' }}</td>
+                </tr>
+                <tr style="background-color: #f3f6f9;">
+                    <th class="table-header">Address</th>
+                    <td class="table-data">{{ user.adresse }}</td>
+                </tr>
+                <tr>
+                    <th class="table-header">Phone</th>
+                    <td class="table-data">{{ user.telephone }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 35px; display: flex; gap: 15px; justify-content: center;">
+            <a href="{{ path('admin_dashborad') }}" class="btn-action btn-back">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+.container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    color: #28a745;  /* Green color */
+}
+
+.table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.table-header {
+    padding: 15px;
+    background: #28a745;  /* Green color */
+    color: white;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 3px solid #1e7e34;  /* Darker green */
+}
+
+.table-data {
+    padding: 15px;
+    border-bottom: 1px solid #dce1e8;
+    color: #28a745;  /* Green color */
+    font-size: 16px;
+}
+
+.btn-action {
+    text-decoration: none;
+    padding: 12px 25px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-back {
+    background-color: #28a745;  /* Green color */
+    color: white;
+}
+
+.btn-edit {
+    background-color: #1e7e34;  /* Darker green */
+    color: white;
+}
+
+.btn-action:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}
