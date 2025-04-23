@@ -1,9 +1,0 @@
-knp_paginator:
-    page_range: 5
-    default_options:
-        page_name: 'page'       # Nom du paramètre de la page dans l'URL
-        sort_field_name: 'sort' # Nom du paramètre pour le tri
-        sort_direction_name: 'direction' # Nom du paramètre pour la direction
-        distinct: true          # Distinction des résultats
-    template:
-        pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig' # Utilisation du template Bootstrap 4
