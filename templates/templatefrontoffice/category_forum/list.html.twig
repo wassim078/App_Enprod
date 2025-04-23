@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des catégories{% endblock %}
+
+{% block body %}
+
+    <style>
+        /* Styles de base */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Titre principal */
+        .title {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Conteneur des catégories */
+        .categories-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Style des cartes de catégories */
+        .category-card {
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: 250px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        /* Effet de survol */
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Message "Aucune catégorie disponible" */
+        .no-category {
+            color: #777;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+
+    <div class="container">
+        <h1 class="title">Liste des catégories du forum</h1>
+
+        {% if categorie_forums is not empty %}
+            <div class="categories-container">
+                {% for categorie in categorie_forums %}
+                    <div class="category-card">
+                        <h2>{{ categorie.nom }}</h2>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-category">Aucune catégorie disponible.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
