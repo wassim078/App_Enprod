@@ -1,146 +1,53 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\AnnonceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnnonceRepository::class)]
+#[ORM\Table(name: 'annonce')]
 class Annonce
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+#[ORM\Id]
+#[ORM\GeneratedValue]
+#[ORM\Column]
+private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+#[ORM\ManyToOne(inversedBy: 'annonces')]
+#[ORM\JoinColumn(name: 'categorie_annonce_id', referencedColumnName: 'id', nullable: false)]
+private ?CategorieAnnonce $categorieAnnonce = null;
 
-    #[ORM\Column]
-    private ?float $poids = null;
 
-    #[ORM\Column]
-    private ?float $prix = null;
+#[ORM\ManyToOne]
+#[ORM\JoinColumn(nullable: false)]
+private ?User $user = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $description = null;
+#[ORM\Column(length: 255)]
+private ?string $titre = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
+#[ORM\Column]
+private ?float $poids = null;
 
-    /**
-     * @var Collection<int, Panier>
-     */
-    #[ORM\ManyToMany(targetEntity: Panier::class, inversedBy: 'annonces')]
-    private Collection $panier;
+#[ORM\Column]
+private ?float $prix = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
-    private ?CategorieAnnonce $categorieAnnonce = null;
+#[ORM\Column(type: 'text')]
+private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
-    private ?User $user = null;
+#[ORM\Column(length: 255)]
+private ?string $image = null;
 
-    /**
-     * @var Collection<int, Commande>
-     */
-    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'annonces')]
-    private Collection $commandes;
-
-    public function __construct()
-    {
-        $this->panier = new ArrayCollection();
-        $this->commandes = new ArrayCollection();
-    }
+#[ORM\Column]
+private ?int $quantite = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitre(): ?string
+    public function setId(?int $id): void
     {
-        return $this->titre;
-    }
-
-    public function setTitre(string $titre): static
-    {
-        $this->titre = $titre;
-
-        return $this;
-    }
-
-    public function getPoids(): ?float
-    {
-        return $this->poids;
-    }
-
-    public function setPoids(float $poids): static
-    {
-        $this->poids = $poids;
-
-        return $this;
-    }
-
-    public function getPrix(): ?float
-    {
-        return $this->prix;
-    }
-
-    public function setPrix(float $prix): static
-    {
-        $this->prix = $prix;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Panier>
-     */
-    public function getPanier(): Collection
-    {
-        return $this->panier;
-    }
-
-    public function addPanier(Panier $panier): static
-    {
-        if (!$this->panier->contains($panier)) {
-            $this->panier->add($panier);
-        }
-
-        return $this;
-    }
-
-    public function removePanier(Panier $panier): static
-    {
-        $this->panier->removeElement($panier);
-
-        return $this;
+        $this->id = $id;
     }
 
     public function getCategorieAnnonce(): ?CategorieAnnonce
@@ -148,49 +55,82 @@ class Annonce
         return $this->categorieAnnonce;
     }
 
-    public function setCategorieAnnonce(?CategorieAnnonce $categorieAnnonce): static
+    public function setCategorieAnnonce(?CategorieAnnonce $categorieAnnonce): self
     {
         $this->categorieAnnonce = $categorieAnnonce;
-
         return $this;
     }
+
 
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?User $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommandes(): Collection
+    public function getPoids(): ?float
     {
-        return $this->commandes;
+        return $this->poids;
     }
 
-    public function addCommande(Commande $commande): static
+    public function setPoids(?float $poids): void
     {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes->add($commande);
-            $commande->addAnnonce($this);
-        }
-
-        return $this;
+        $this->poids = $poids;
     }
 
-    public function removeCommande(Commande $commande): static
+    public function getTitre(): ?string
     {
-        if ($this->commandes->removeElement($commande)) {
-            $commande->removeAnnonce($this);
-        }
-
-        return $this;
+        return $this->titre;
     }
+
+    public function setTitre(?string $titre): void
+    {
+        $this->titre = $titre;
+    }
+
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?float $prix): void
+    {
+        $this->prix = $prix;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(?int $quantite): void
+    {
+        $this->quantite = $quantite;
+    }
+
+// Add getters and setters for all properties
 }

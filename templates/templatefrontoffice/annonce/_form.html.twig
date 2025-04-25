@@ -1,122 +1,65 @@
-{% block stylesheets %}
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f9f9f9;
-    }
+<div class="form-group">
+    {{ form_label(form.titre) }}
+    {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.titre) }}
+</div>
 
-    .form-container {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 30px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    h1.page-title {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #4CAF50; /* Light green */
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    label {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        border-color: #4CAF50; /* Light green */
-        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-    }
-
-    .form-control.error {
-        border-color: #e74c3c;
-        box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
-    }
-
-    .form-group .error-message {
-        color: #e74c3c;
-        font-size: 0.9rem;
-        margin-top: 5px;
-    }
-
-    button.btn {
-        width: 100%;
-        padding: 12px;
-        font-size: 1.1rem;
-        background-color: #4CAF50; /* Light green */
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    button.btn:hover {
-        background-color: #45a049; /* Slightly darker green */
-    }
-
-    button.btn:active {
-        background-color: #388e3c; /* Even darker green */
-    }
-
-    .form-footer {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .form-footer a {
-        color: #4CAF50;
-        text-decoration: none;
-    }
-
-    .form-footer a:hover {
-        text-decoration: underline;
-    }
-</style>
-{% endblock %}
-
-{% block body %}
-    <div class="form-container">
-        <h1 class="page-title">Create Category</h1>
-
-        {{ form_start(form) }}
-        
-        <div class="form-group">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name, {
-                'attr': {'class': 'form-control' }
-            }) }}
-            {% if form.name.vars.errors|length > 0 %}
-                <div class="error-message">
-                    {{ form_errors(form.name) }}
-                </div>
-            {% endif %}
+<div class="form-row">
+    <div class="form-group col-md-6">
+        {{ form_label(form.prix) }}
+        <div class="input-group">
+            {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+            <div class="input-group-append">
+                <span class="input-group-text">TND</span>
+            </div>
         </div>
-
-        <button class="btn">{{ button_label|default('Save') }}</button>
-
-        {{ form_end(form) }}
-
-        <div class="form-footer">
-            <a href="{{ path('category_index') }}">Back to Categories</a>
-        </div>
+        {{ form_errors(form.prix) }}
     </div>
-{% endblock %}
+
+    <div class="form-group col-md-6">
+        {{ form_label(form.quantite) }}
+        {{ form_widget(form.quantite, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.quantite) }}
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        {{ form_label(form.poids) }}
+        <div class="input-group">
+            {{ form_widget(form.poids, {'attr': {'class': 'form-control'}}) }}
+            <div class="input-group-append">
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+        {{ form_errors(form.poids) }}
+    </div>
+
+    <div class="form-group col-md-6">
+        {{ form_label(form.categorieAnnonce) }}
+        {{ form_widget(form.categorieAnnonce, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.categorieAnnonce) }}
+    </div>
+</div>
+
+<div class="form-group">
+    {{ form_label(form.description) }}
+    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+    {{ form_errors(form.description) }}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.imageFile) }}
+    {% if annonce.image %}
+        <div class="current-image mb-3">
+            <img src="{{ asset('uploads/' ~ annonce.image) }}"
+                 class="img-thumbnail"
+                 style="max-height: 200px"
+                 alt="Current image">
+            <small class="form-text text-muted">Current image</small>
+        </div>
+    {% endif %}
+    {{ form_widget(form.imageFile, {'attr': {'class': 'form-control-file'}}) }}
+    {{ form_errors(form.imageFile) }}
+    <small class="form-text text-muted">Upload new image to replace existing one</small>
+</div>

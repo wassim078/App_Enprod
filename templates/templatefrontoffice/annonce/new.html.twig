@@ -1,11 +1,82 @@
-{% extends 'templatefrontoffice/base.html.twig' %}
+{# templates/templatefrontoffice/annonce/new.html.twig #}
+{% extends 'templatefrontoffice/annonce/index.html.twig' %}
 
-{% block title %}New Annonce{% endblock %}
+{% block title %}Create New Annonce - LiveCycle{% endblock %}
 
 {% block body %}
-    <h1>Create new Annonce</h1>
+    <section class="container mt-5" style="padding: 50px 0;">
+        <div class="card shadow-sm" style="border-radius: 15px;">
+            <div class="card-body">
+                <h2 class="mb-4" style="color: #214b27;">Create New Annonce</h2>
 
-    {{ include('templatefrontoffice/annonce/_form.html.twig') }}
+                {{ form_start(form) }}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ form_row(form.titre, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Product title'}
+                        }) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.categorieAnnonce, {
+                            'attr': {'class': 'form-select'}
+                        }) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.prix, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Price in TND'}
+                        }) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.quantite, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Stock quantity'}
+                        }) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_row(form.poids, {
+                            'attr': {'class': 'form-control', 'placeholder': 'Weight in kg'}
+                        }) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.description, {
+                            'attr': {'class': 'form-control', 'rows': 4, 'placeholder': 'Product description'}
+                        }) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.imageFile, {
+                            'attr': {'class': 'form-control'}
+                        }) }}
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-success" style="background-color: #214b27;">
+                            <i class="fa fa-save"></i> Create Annonce
+                        </button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
 
-    <a href="{{ path('app_annonce_index') }}">back to list</a>
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <script>
+        // disable auto discovery so we control it by ID
+        Dropzone.autoDiscover = false;
+
+        // turn our file input into a Dropzone:
+        new Dropzone("#imageDropzone", {
+            paramName: "annonce[imageFile]",
+            maxFilesize: 2,           // MB
+            acceptedFiles: "image/*",
+            dictDefaultMessage: "Drop an image here or click to upload",
+        });
+    </script>
 {% endblock %}

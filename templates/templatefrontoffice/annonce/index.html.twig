@@ -1,111 +1,236 @@
 {% extends 'templatefrontoffice/base.html.twig' %}
 
-{% block title %}Annonce index{% endblock %}
+
+
+
+
+
+{% block title %}Shop - LiveCycle{% endblock %}
+
+
+
+
 
 {% block active %}
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice">HOME </a>
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/templatefrontoffice/annonce">ANNONCE</a>
+            <li class="nav-item dropdown {{ 'annonce' in app.request.get('_route') ? 'active' : '' }} active">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item active" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
+            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a></li>
+            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/forum">FORUM</a></li>
+            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">COMMANDES</a></li>
+            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a></li>
+
+            {# Cart icon inside collapse #}
+            <li class="nav-item ms-3 me-4 mr-5 position-relative">
+                <a class="nav-link text-white p-0" href="/cart">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
-            </li>
-          
-          </ul>
-          
-        </div>
-        {% endblock %}
+        </ul>
+    </div>
+{% endblock %}
+
+
 
 
 
 {% block body %}
-    <div class="container mt-5" style="max-width: 1200px;">
-        <h1 class="mb-4 text-center" style="color: #4CAF50; border-bottom: 2px solid #C8E6C9; padding-bottom: 10px;">Annonce Management</h1>
-
-        <div class="d-flex justify-content-end mb-4">
-            <a href="{{ path('app_annonce_new') }}" class="btn btn-success" style="background-color: #66BB6A; border-color: #66BB6A;">
-                 Create New Announcement
-            </a>
+    {% for flashError in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ flashError }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+    <section class="shop-section" style="flex: 1; padding: 100px 0 120px;  {# Increased top padding #}
+            background-image: url('{{ asset('uploads/annonce_bg.png') }}');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            background-color: #8abd9b;
+            background-blend-mode: multiply;
+            min-height: 100vh; {# Ensure full height #}
+            display: flex;
+            align-items: center;">
+        <div class="overlay" style="position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(214,228,216, 0.9); {# Added opacity #}
+                z-index: 0;">
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-hover table-striped">
-                <thead class="thead-light" style="background-color: #E8F5E9;">
-                    <tr>
-                        <th scope="col" style="color: #2E7D32;">ID</th>
-                        <th scope="col" style="color: #2E7D32;">Title</th>
-                        <th scope="col" style="color: #2E7D32;">Weight</th>
-                        <th scope="col" style="color: #2E7D32;">Price</th>
-                        <th scope="col" style="color: #2E7D32;">Description</th>
-                        <th scope="col" style="color: #2E7D32;">Image</th>
-                        <th scope="col" style="color: #2E7D32;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div class="container" style="position: relative; z-index: 1; padding-top: 40px;"> {# Added padding-top #}
+            <div class="text-center mb-5">
+                <h2 style="color: #214b27;
+                     font-weight: 800;
+                     font-size: 2.8rem;
+                     letter-spacing: -0.5px;
+                     margin-bottom: 1.5rem;"> {# Improved typography #}
+                    Explore Our Recycling Products
+                </h2>
+                <p class="lead-text" style="color: #4a6653;
+                       font-size: 1.2rem;
+                       max-width: 600px;
+                       margin: 0 auto;
+                       line-height: 1.6;"> {# Enhanced subtitle #}
+                    Discover eco-friendly items and learn about sustainable practices that make a difference.
+                </p>
+            </div>
+
+
+
+            <div class="row">
                 {% for annonce in annonces %}
-                    <tr style="background-color: {% if loop.index is odd %}#F8FBF8{% else %}white{% endif %};">
-                        <td>{{ annonce.id }}</td>
-                        <td>{{ annonce.titre }}</td>
-                        <td>{{ annonce.poids }}</td>
-                        <td>{{ annonce.prix }} €</td>
-                        <td class="text-truncate" style="max-width: 200px;">{{ annonce.description }}</td>
-                        <td>
-                            {% if annonce.image %}
-                                <img src="{{ asset('uploads/images/' ~ annonce.image) }}" alt="Announcement Image" 
-                                     style="max-width: 80px; max-height: 60px; border-radius: 4px;">
-                            {% else %}
-                                <span class="text-muted">No image</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <a href="{{ path('app_annonce_show', {'id': annonce.id}) }}" 
-                                   class="btn btn-outline-success btn-sm">
-                                   <i class="fas fa-eye"></i> View
-                                </a>
-                                <a href="{{ path('app_annonce_edit', {'id': annonce.id}) }}" 
-                                   class="btn btn-outline-primary btn-sm">
-                                   <i class="fas fa-edit"></i> Edit
-                                </a>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow-lg border-0" style="border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; background-color: #fff;">
+                            <div style="position: relative;">
+                                <img src="{{ asset('uploads/' ~ annonce.image) }}"
+                                     class="card-img-top"
+                                     alt="{{ annonce.titre }}"
+                                     style="height: 220px; object-fit: cover; border-radius: 20px 20px 0 0;">
+                                <span class="badge bg-success position-absolute" style="top: 10px; left: 10px; background-color: #214b27 !important; font-size: 0.9rem; padding: 8px 12px;">
+                                    {{ annonce.categorieAnnonce.name }}
+                                </span>
                             </div>
-                        </td>
-                    </tr>
+                            <div class="card-body p-4">
+                                <h5 class="card-title mb-3" style="color: #214b27; font-weight: 600; font-size: 1.25rem;">{{ annonce.titre }}</h5>
+                                <p class="card-text text-muted mb-3" style="font-size: 0.95rem;">{{ annonce.description|slice(0, 120) }}...</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 style="color: #214b27; font-weight: 700; font-size: 1.2rem;">
+                                        {{ annonce.prix }} TND
+                                    </h5>
+                                    <span class="text-muted" style="font-size: 0.9rem;">Stock: {{ annonce.quantite }}</span>
+                                </div>
+                                {% if app.user and 'ROLE_ENTREPRISE' in app.user.roles %}
+                                    <form action="{{ path('cart_add', {'id': annonce.id}) }}" method="POST">
+                                        <button
+                                                type="submit"
+                                                class="btn btn-success w-100 add-to-cart"
+                                                data-max="{{ annonce.quantite }}"
+                                                data-current="{{ cart[annonce.id]|default(0) }}"
+                                                {% if (cart[annonce.id]|default(0)) >= annonce.quantite %}disabled{% endif %}
+                                        >
+                                            <i class="fa fa-shopping-cart me-2"></i>
+                                            {% if (cart[annonce.id]|default(0)) >= annonce.quantite %}
+                                                Out of Stock
+                                            {% else %}
+                                                Add to Cart
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 {% else %}
-                    <tr>
-                        <td colspan="7" class="text-center text-muted py-4">No announcements found</td>
-                    </tr>
+                    <div class="col-12 text-center">
+                        <div class="alert alert-info p-4" style="border-radius: 10px;">
+                            No products available at the moment. Check back soon!
+                        </div>
+                    </div>
                 {% endfor %}
-                </tbody>
-            </table>
+            </div>
         </div>
-    </div>
+    </section>
 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f9fbf9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background-color: #214b27; {# Match footer background #}
         }
-        .table-hover tbody tr:hover {
-            background-color: #F1F8E9 !important;
+
+        .shop-section {
+            background-attachment: fixed; {# Parallax effect #}
+            box-shadow: inset 0 -40px 40px -40px rgba(0,0,0,0.1); {# Soft bottom shadow #}
         }
-        .btn-success {
-            transition: all 0.3s ease;
+
+        .lead-text {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05); {# Subtle text depth #}
         }
-        .btn-success:hover {
-            background-color: #57A358 !important;
+
+        .card {
+            border: none;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        th {
-            font-weight: 600;
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.25);
+        }
+
+        footer.footer_section {
+            margin-top: auto; {# Ensure footer sticks to bottom #}
+            position: relative;
+            z-index: 2;
         }
     </style>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', async e => {
+                e.preventDefault();
+                const form = button.closest('form');
+                try {
+                    const resp = await fetch(form.action, {
+                        method: 'POST',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    const data = await resp.json();
+
+                    if (data.type === 'error') {
+                        return alert(data.message);
+                    }
+
+                    // 1) update the total-items badge
+                    document.querySelectorAll('.cart-counter')
+                        .forEach(c => c.textContent = data.count);
+
+                    // 2) bump this button’s own count
+                    const current = data.itemCount;
+                    const max     = parseInt(button.dataset.max, 10);
+                    button.dataset.current = current;
+
+                    // 3) if we’ve reached max, disable + relabel
+                    if (current >= max) {
+                        button.disabled = true;
+                        button.innerHTML = '<i class="fa fa-shopping-cart me-2"></i> Out of Stock';
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        });
+    </script>
 {% endblock %}

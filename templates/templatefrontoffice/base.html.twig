@@ -32,7 +32,7 @@
   <style>
     .header_section {
       background-color:rgb(33, 75, 39) !important;
-      padding: 15px 0;
+      padding: 5px 0;
     }
 
     .navbar {
@@ -115,7 +115,7 @@
     .footer_section {
       background-color: rgb(33, 75, 39);
       color: white;
-      padding: 40px 0;
+      padding: 20px 0;
     }
 
     .footer_section a {
@@ -190,6 +190,110 @@
 .dropdown-item:last-child:hover {
   border-radius: 0 0 4px 4px;
 }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .page-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content-wrapper {
+      flex: 1;
+      padding-bottom: 60px; /* Adjust based on footer height */
+    }
+
+    .footer_section {
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+    .dropdown-menu {
+      min-width: 200px; /* Increased from 120px */
+      padding: 0.5rem 0; /* Added padding */
+    }
+
+    .dropdown-item {
+      padding: 0.75rem 1.5rem; /* Increased padding */
+      font-size: 16px; /* Larger font size */
+      color: #333 !important; /* Ensure text color contrast */
+      white-space: normal;
+      z-index: 1000;/* Allow text wrapping */
+    }
+
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #000 !important;
+    }
+
+    /* For active state */
+    .dropdown-item.active {
+      background-color: rgba(33, 75, 39, 0.1);
+      color: rgb(33, 75, 39) !important;
+      font-weight: 500;
+    }
+
+    /* Ensure dropdown aligns properly */
+    .navbar-nav .dropdown-menu {
+      position: absolute;
+      left: auto;
+      right: 0;
+    }
+
+    .fa-shopping-cart {
+      transition: transform 0.3s ease;
+    }
+
+    .fa-shopping-cart:hover {
+      transform: scale(1.1);
+      color: #88c9a1 !important;  {# Accent color on hover #}
+    }
+
+    /* Optional: Add cart counter */
+    .cart-counter {
+      position: absolute;
+      top: -3px;       /* Adjusted from -5px */
+      right: -5px;     /* Adjusted from -8px */
+      background: #ff4d4d;
+      color: white;
+      border-radius: 50%;
+      padding: 1px 4px; /* Reduced from 2px 6px */
+      font-size: 0.6rem; /* Reduced from 0.75rem */
+      line-height: 1;   /* Added for better vertical alignment */
+      z-index: 1002;
+    }
+
+    /* In your existing CSS */
+    .nav-item.ms-3.me-4.position-relative {
+      z-index: 1001; /* Higher than profile dropdown's z-index */
+    }
+
+
+    .collapse.navbar-collapse {
+      z-index: 1;
+      position: relative;
+    }
+
+    .user_option {
+      z-index: 1002;
+      position: relative;
+    }
+    .add-to-cart {
+      transition: transform 0.2s ease;
+    }
+
+    .add-to-cart:active {
+      transform: scale(0.95);
+    }
+
   </style>
 
 
@@ -208,68 +312,84 @@
 
 
 
+<div class="page-wrapper">
+
 
   {% block header %}
-  <!-- Header Section -->
-  <header class="header_section">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg custom_nav-container">
-        <a class="navbar-brand" href="/templatefrontoffice">
-          <img src="{{asset('frontoffice/images/logo_rounded.png')}}" alt="LiveCycle Logo" style="height: 55px; width: 55px; margin-right: 20px;">
-          <span>LiveCycle</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class=""></span>
-        </button>
-        {% block active %}
-        
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/templatefrontoffice">HOME </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/annonce">ANNONCE</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a>
-            </li>
-          </ul>
-        </div>
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <a class="navbar-brand" href="/templatefrontoffice">
+            <img src="{{ asset('frontoffice/images/logo_rounded.png') }}"
+                 alt="LiveCycle Logo"
+                 style="height:55px;width:55px;margin-right:20px;">
+            <span>LiveCycle</span>
+          </a>
+          <button class="navbar-toggler" type="button"
+                  data-toggle="collapse" data-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent" aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-        {% endblock %}
-        
-        <div class="user_option">
-                {% if app.user %}
-    {# User is logged in - show profile dropdown #}
-      <div class="profile-dropdown">
-      <img src="{{ app.user.image ? asset('frontoffice/images/' ~ app.user.image) : asset('frontoffice/images/default.jpg') }}" 
-           class="profile-image" 
-           alt="Profile" 
-           id="profileDropdownTrigger">
-      <div class="dropdown-menu" id="profileDropdown">
-        <a href="{{ path('user_profile_edit') }}" class="dropdown-item">Profil</a>
-        <a href="{{ path('app_logout') }}" class="dropdown-item">Logout</a>
+          {# ← your `active` block wraps exactly the collapse/nav-items #}
+          {% block active %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/templatefrontoffice">HOME</a>
+                </li>
+                <li class="nav-item dropdown {{ 'annonce' in app.request.get('_route') ? 'active' : '' }}">
+                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                  </a>
+                  <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                      <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                        My Announcements
+                      </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                  </div>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a></li>
+                <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/forum">FORUM</a></li>
+                <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">COMMANDES</a></li>
+                <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a></li>
+
+                {# Cart icon inside collapse #}
+                <li class="nav-item ms-3 me-4 mr-5 position-relative">
+                  <a class="nav-link text-white p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          {% endblock %}
+
+          {# Profile OUTSIDE collapse, pushed to far right #}
+          <div class="user_option ms-auto ml-5">
+            {% if app.user %}
+              <div class="profile-dropdown">
+                <img src="{{ app.user.image
+                ? asset('frontoffice/images/' ~ app.user.image)
+                : asset('frontoffice/images/default.jpg') }}"
+                     class="profile-image"
+                     alt="Profile"
+                     id="profileDropdownTrigger">
+                <div class="dropdown-menu" id="profileDropdown">
+                  <a href="{{ path('user_profile_edit') }}" class="dropdown-item">Profil</a>
+                  <a href="{{ path('app_logout') }}" class="dropdown-item">Logout</a>
+                </div>
+              </div>
+            {% else %}
+              <a href="/login" class="order_online">LOG IN</a>
+            {% endif %}
+          </div>
+        </nav>
       </div>
-    </div>
-        {% else %}
-    {# User not logged in - show login button #}
-    <a href="/login" class="order_online">
-      LOG IN
-    </a>
-      {% endif %}
-
-
-</div>
-      </nav>
-    </div>
-  </header>
+    </header>
   {% endblock %}
 
 
@@ -281,6 +401,8 @@
 
 
 
+
+  <div class="content-wrapper">
   {% block body %}
   <!-- Hero Section -->
   <div class="hero_area">
@@ -318,7 +440,7 @@
           </div>
         </div>
       </div>
-        
+
       <!-- Slide 3 -->
       <div class="carousel-item">
         <div class="container">
@@ -414,22 +536,15 @@
     </div>
   </section>
 
-    
+
 
   {% endblock body %}
-
-
-
-
-
-
-
-
+  </div>
 
 
 
   {% block footer %}
-  
+
 
   <footer class="footer_section">
     <div class="container">
@@ -471,7 +586,7 @@
   </footer>
 
 
-  
+
 
   <!-- Scripts -->
   <script src="{{asset('frontoffice/js/jquery-3.4.1.min.js')}}"></script>
@@ -482,6 +597,9 @@
 
 
 {% endblock footer %}
+
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const dropdownTrigger = document.getElementById('profileDropdownTrigger');
@@ -502,5 +620,40 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const form = button.closest('form');
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (response.ok) {
+        const cartCounter = document.querySelector('.cart-counter');
+        const currentCount = parseInt(cartCounter.textContent);
+        cartCounter.textContent = currentCount + 1;
+
+        // Optional: Show flash message
+        const flash = document.createElement('div');
+        flash.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+        flash.textContent = 'Item added to cart!';
+        document.body.appendChild(flash);
+
+        setTimeout(() => flash.remove(), 3000);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+});
+
+
+
 </script>
 </html>

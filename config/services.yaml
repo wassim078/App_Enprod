@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     images_directory: '%kernel.project_dir%/public/frontoffice/images'
+    uploads_directory: '%kernel.project_dir%/public/uploads'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -19,7 +20,10 @@ services:
     annotations.reader:
         class: Doctrine\Common\Annotations\AnnotationReader
 
-        
+    App\Twig\CartExtension:
+        arguments: [ '@App\Service\CartService' ]
+        tags: [ 'twig.extension' ]
+
     App\Controller\frontoffice\:
         resource: '../src/Controller/frontoffice'
         tags: ['controller.service_arguments']

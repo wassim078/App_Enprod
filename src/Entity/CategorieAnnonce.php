@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategorieAnnonceRepository::class)]
+#[ORM\Table(name: 'categorie_annonce')]
 class CategorieAnnonce
 {
     #[ORM\Id]
@@ -18,15 +19,8 @@ class CategorieAnnonce
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $descrition = null;
-
-    /**
-     * @var Collection<int, Annonce>
-     */
-    #[ORM\OneToMany(targetEntity: Annonce::class, mappedBy: 'categorieAnnonce')]
+    #[ORM\OneToMany(mappedBy: 'categorieAnnonce', targetEntity: Annonce::class)]
     private Collection $annonces;
-
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
@@ -37,29 +31,22 @@ class CategorieAnnonce
         return $this->id;
     }
 
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function getDescrition(): ?string
-    {
-        return $this->descrition;
-    }
 
-    public function setDescrition(?string $descrition): static
-    {
-        $this->descrition = $descrition;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Annonce>

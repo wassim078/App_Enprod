@@ -1,6 +1,4 @@
-{% extends 'templatefrontoffice/base.html.twig' %}
 
-{% block title %}Register{% endblock %}
 
 {% block stylesheets %}
   <!-- Add custom styles for the registration form and background image -->
@@ -104,6 +102,21 @@
     <h1>Register</h1>
 
     {{ form_start(registrationForm, { 'attr': { 'class': 'registration-form' ,'novalidate':'novalidate'} }) }}
+
+
+    <div class="form-group">
+      {{ form_label(registrationForm.nom, 'Last Name', { 'label_attr': { 'class': 'form-label' } }) }}
+      {{ form_widget(registrationForm.nom, { 'attr': { 'class': 'form-control' } }) }}
+      <small class="text-danger">{{ form_errors(registrationForm.nom) }}</small>
+    </div>
+
+    <div class="form-group">
+      {{ form_label(registrationForm.prenom, 'First Name', { 'label_attr': { 'class': 'form-label' } }) }}
+      {{ form_widget(registrationForm.prenom, { 'attr': { 'class': 'form-control' } }) }}
+      <small class="text-danger">{{ form_errors(registrationForm.prenom) }}</small>
+    </div>
+
+
       <div class="form-group">
         {{ form_label(registrationForm.email, 'Email', { 'label_attr': { 'class': 'form-label' } }) }}
         {{ form_widget(registrationForm.email, { 'attr': { 'class': 'form-control' } }) }}

@@ -75,6 +75,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS } # Allow everyone to access the login page
         - { path: ^/register, roles: PUBLIC_ACCESS } # Allow everyone to access the registration page
         - { path: ^/templatebackoffice, roles: ROLE_ADMIN} # Only admins can access the dashboard
+        - { path: ^/commande/checkout, roles: ROLE_ENTREPRISE }
          # Protect all API routes
 when@test:
     security:

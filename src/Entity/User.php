@@ -21,6 +21,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+
+
+
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message:'Should be not blank',groups: ['Registration','EditUser','AddUser','ModifyUser'])]
+    #[Assert\Length(min:3,exactMessage:'Should be minimum 3 Characters',groups: ['Registration','EditUser','AddUser','ModifyUser'])]
+    private ?string $nom = null;
+
+
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message:'Should be not blank',groups: ['Registration','EditUser','AddUser','ModifyUser'])]
+    #[Assert\Length(min:3,exactMessage:'Should be minimum 3 Characters',groups: ['Registration','EditUser','AddUser','ModifyUser'])]
+    private ?string $prenom = null;
+
+
     #[ORM\Column(length: 180)]
 
 
@@ -194,4 +211,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): static
+    {
+        $this->prenom = $prenom;
+        return $this;
+    }
+
 }
