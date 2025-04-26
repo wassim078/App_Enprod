@@ -29,6 +29,10 @@ services:
         resource: '../src/Controller/frontoffice'
         tags: ['controller.service_arguments']
 
+
+    App\Security\Bcrypt2aPasswordHasher:
+        tags: [ 'security.password_hasher' ]
+
     App\Controller\backoffice\:
         resource: '../src/Controller/backoffice'
         tags: ['controller.service_arguments']    

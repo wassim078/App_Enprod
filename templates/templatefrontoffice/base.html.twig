@@ -36,7 +36,7 @@
     .navbar-brand span {
       color: white !important;
       font-weight: bold !important;
-      font-size: 1.5rem; /* Optional: Increase font size if desired */
+      font-size: 1.5rem;
     }
 
     .navbar {
@@ -72,13 +72,13 @@
     }
 
     .dropdown-menu {
-      min-width: 200px; /* Increased minimum width */
+      min-width: 200px;
       padding: 0.5rem 0;
       border-radius: 8px;
       border: 1px solid rgba(0,0,0,0.1);
       background: #ffffff;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      z-index: 1001; /* Ensure it appears above other elements */
+      z-index: 1001;
     }
 
     .dropdown-item {
@@ -89,6 +89,31 @@
     .dropdown-item:hover {
       background: #fff9e6;
       padding-left: 2rem;
+    }
+
+    /* Updated Login Button Styles */
+    .user_option .login-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1.2rem;
+      background-color: #ffd700;
+      color: #212529 !important;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+      white-space: nowrap; /* Prevent text wrapping */
+      min-width: 80px; /* Ensure sufficient width for text */
+      justify-content: center; /* Center text horizontally */
+    }
+
+    .user_option .login-btn:hover {
+      background-color: #e6c200;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
     }
 
     /* Original Other Styles */
@@ -223,11 +248,10 @@
     }
 
     .dropdown-item:hover {
-      background:  #ffd700;
+      background: #ffd700;
       padding-left: 16px;
     }
 
-    /* Remove duplicate dropdown-menu styles */
     .nav-item.dropdown .dropdown-menu {
       position: absolute;
       top: 100%;
@@ -235,7 +259,6 @@
       right: auto;
       transform: none;
     }
-
 
     html, body {
       height: 100%;
@@ -298,16 +321,23 @@
       }
     }
 
-    .navbar-brand span {
-      color: white !important;
-      font-weight: bold !important;
-      font-size: 1.1rem; /* Optional: Increase font size if desired */
+    @media (max-width: 991px) {
+      .user_option {
+        margin-left: 0;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      .user_option .login-btn {
+        padding: 0.5rem 1rem;
+        min-width: 70px; /* Slightly smaller min-width for mobile */
+      }
     }
   </style>
 
   {% block stylesheets %}{% endblock %}
 </head>
 
+<body>
 <div class="page-wrapper">
   {% block header %}
     <header class="header_section">
@@ -329,7 +359,7 @@
           {% block active %}
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mx-auto">
-                <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }} active">
+                <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
                   <a class="nav-link" href="/templatefrontoffice">HOME</a>
                 </li>
                 <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
@@ -398,7 +428,7 @@
                 </div>
               </div>
             {% else %}
-              <a href="/login" class="btn btn-light px-4 py-2">LOG IN</a>
+              <a href="/login" class="login-btn">LOG IN</a>
             {% endif %}
           </div>
         </nav>
@@ -473,7 +503,7 @@
                 <div class="row">
                   <div class="col-md-7 col-lg-6">
                     <div class="detail-box">
-                      <h1>Innovativ Recyclin🚀</h1>
+                      <h1>Innovative Recycling🚀</h1>
                       <p>
                         "Discover innovative solutions for recycling waste. Join LiveCycle today and be part of the change."
                       </p>
@@ -629,4 +659,16 @@
     });
   });
 </script>
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/67c0cfcdeb8eb2190ceecf81/1il4inepe';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
+</script>
+</body>
 </html>
