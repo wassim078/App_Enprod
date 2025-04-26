@@ -12,4 +12,15 @@ class CommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commande::class);
     }
+
+
+    public function findAllWithUser()
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.user', 'u')
+            ->addSelect('u')
+            ->orderBy('c.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

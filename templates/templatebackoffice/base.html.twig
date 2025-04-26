@@ -101,9 +101,7 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                margin-left: -var(--sidebar-width);
-            }
+
             
             .main-content {
                 margin-left: 0;
@@ -115,6 +113,32 @@
 
             .brand-image {
                 max-height: 80px !important;  /* Slightly smaller on mobile */
+            }
+            .sidebar-nav .dropdown-menu {
+                background-color: #f8f9fa;
+                border: none;
+                box-shadow: none;
+                margin-left: 1rem;
+                position: static !important;
+                transform: none !important;
+            }
+
+            .sidebar-nav .dropdown-item {
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                color: #4a5568;
+                transition: all 0.2s ease;
+            }
+
+            .sidebar-nav .dropdown-item:hover,
+            .sidebar-nav .dropdown-item.active {
+                background-color: #e9ecef;
+                color: #1a1a1a;
+            }
+
+            .sidebar-nav .dropdown-toggle::after {
+                vertical-align: middle;
+                margin-left: auto;
             }
         }
         /* Profile Dropdown Styles */
@@ -143,7 +167,35 @@
 .content-header {
     position: relative;
 }
+
+
+        /* Category dropdown styling */
+        .category-item.active {
+            background: #379226 !important;
+            color: white !important;
+        }
+
+        .category-item.active:hover {
+            background: #2d7a1f !important;
+        }
+
+        /* Keep parent button from getting active state */
+        .nav-item.dropdown .nav-link.active {
+            background: inherit;
+            color: inherit;
+        }
+
+        /* Keep dropdown open when item is selected */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+
+
+
         </style>
+
+
         {% block stylesheets %}{% endblock %}
 </head>
 
@@ -207,6 +259,52 @@
                         Reclamations
                     </a>
                 </li>
+
+                <li class="nav-item mb-1">
+                    <a href="/templatebackoffice/commande" class="nav-link {{ _self.active_class('admin_commande_management') }}">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        Commandes
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown mb-1">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="fas fa-layer-group me-3"></i>
+                        Categories
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item category-item {{ _self.active_class('admin_category_forum') }}"
+                               href="{{ path('admin_category_forum') }}"
+                               data-bs-auto-close="outside">
+                                <i class="fas fa-comments me-2"></i>
+                                Category Forum
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item category-item {{ _self.active_class('admin_category_collect') }}"
+                               href="{{ path('admin_category_collect') }}"
+                               data-bs-auto-close="outside">
+                                <i class="fas fa-recycle me-2"></i>
+                                Category Collect
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item category-item {{ _self.active_class('admin_category_annonce') }}"
+                               href="{{ path('admin_category_annonce') }}"
+                               data-bs-auto-close="outside">
+                                <i class="fas fa-tag me-2"></i>
+                                Category Annonce
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
             </ul>
         </nav>
     </aside>
@@ -269,6 +367,29 @@
         // Sidebar Toggle for Mobile
         document.querySelector('.sidebar-toggler').addEventListener('click', function() {
             document.querySelector('.wrapper').classList.toggle('sidebar-collapsed');
+        });
+
+        // Keep dropdown open and handle active states
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                // Remove active class from all category items
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                e.currentTarget.classList.add('active');
+                // Keep dropdown open
+                const dropdown = e.currentTarget.closest('.dropdown');
+                const menu = dropdown.querySelector('.dropdown-menu');
+                menu.classList.add('show');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-item.dropdown')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
         });
     </script>
 {% endblock %}

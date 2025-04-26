@@ -1,0 +1,241 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+{% block title %}Create Complaint{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .complaint-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .complaint-form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-title {
+            font-weight: 700;
+            color: #1a3c34;
+            position: relative;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .form-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #28a745, #34d058);
+            border-radius: 2px;
+            margin: 10px auto;
+            transform: skew(-15deg);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        .file-input-container {
+            border: 2px dashed #ced4da;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            background: #f8f9fa;
+            transition: border-color 0.2s ease;
+        }
+
+        .file-input-container:hover {
+            border-color: #28a745;
+        }
+
+        .file-input-container .form-control {
+            border: none;
+            background: transparent;
+            padding: 0.5rem;
+        }
+
+        .btn-green {
+            background: linear-gradient(90deg, #28a745, #34d058);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-green:hover {
+            background: linear-gradient(90deg, #218838, #28a745);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .form-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .complaint-form-container {
+                padding: 1.5rem;
+            }
+            .form-title {
+                font-size: 1.75rem;
+            }
+            .btn-green {
+                padding: 0.6rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .complaint-form-container {
+                padding: 1rem;
+            }
+            .form-title {
+                font-size: 1.5rem;
+            }
+            .form-title::after {
+                width: 40px;
+                height: 3px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }} active">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="complaint-form-container">
+            <h2 class="form-title text-center">Create New Complaint</h2>
+
+            {{ form_start(form) }}
+            <div class="mb-4">
+                {{ form_label(form.type, 'Complaint Type', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                {% if form_errors(form.type) %}
+                    <div class="form-error">{{ form_errors(form.type) }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.sujet, 'Subject', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.sujet, {'attr': {'class': 'form-control', 'placeholder': 'Enter the subject of your complaint'}}) }}
+                {% if form_errors(form.sujet) %}
+                    <div class="form-error">{{ form_errors(form.sujet) }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 6, 'placeholder': 'Describe your issue in detail'}}) }}
+                {% if form_errors(form.description) %}
+                    <div class="form-error">{{ form_errors(form.description) }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <div class="file-input-container">
+                    {{ form_label(form.file, 'Attachment (Optional)', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
+                    <small class="text-muted d-block mt-2">PDF, JPG, or PNG (Max 5MB)</small>
+                    {% if form_errors(form.file) %}
+                        <div class="form-error">{{ form_errors(form.file) }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-green btn-lg">
+                    <i class="fas me-2"></i>Submit Complaint
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

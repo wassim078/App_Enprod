@@ -38,9 +38,6 @@ final class FrontHomeController extends AbstractController{
 
         return $this->render('templatefrontoffice/base.html.twig');
     }
-    
-
-
 
 }
 

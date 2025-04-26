@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
+#[ORM\Table(name: 'panier')]
 class Panier
 {
     #[ORM\Id]

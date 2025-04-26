@@ -1,67 +1,48 @@
-{% extends 'templatebackoffice/index.html.twig' %}
+{% extends 'templatebackoffice/base.html.twig' %}
 
-{% block title %}Edit Category{% endblock %}
+{% block title %}Edit Category #{{ category.id }}{% endblock %}
 
-{% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg border-0">
-                <div class="card-header text-white text-center py-3" style="background-color: #1D6F42;">
-                    <h3>Edit Category</h3>
-                </div>
-                <div class="card-body">
-                    <!-- Form Start -->
-                    {{ form_start(form) }}
-                    <div class="mb-3">
-                        <label for="name" class="form-label">{{ form_label(form.name) }}</label>
-                        {{ form_widget(form.name, {'attr': {'class': 'form-control shadow-sm border-success', 'placeholder': 'Enter category name'}}) }}
-                        <div class="invalid-feedback">{{ form_errors(form.name) }}</div>
-                    </div>
+{% block content %}
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center;">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: #1f2937; text-align: center; border-bottom: 4px solid #16a34a; padding-bottom: 0.75rem;">Edit Category #{{ category.id }}</h1>
+            <a href="{{ path('admin_category_annonce') }}"
+               style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; border: 1px solid #16a34a; font-size: 0.875rem; font-weight: 500; color: #16a34a; background-color: #f0fdf4; border-radius: 0.375rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); text-decoration: none; transition: background-color 0.2s, transform 0.2s;">
+                <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Back to List
+            </a>
+            <style>
+                a[href="{{ path('admin_category_annonce') }}"]:hover { background-color: #dcfce7; transform: translateY(-2px); }
+            </style>
+        </div>
 
-                    <button type="submit" class="btn btn-success btn-lg w-100 mt-4 py-3 shadow-sm">Update Category</button>
-                    {{ form_end(form) }}
+        <!-- Debug: Test Font Awesome -->
+        <i class="fas fa-user" style="font-size: 24px; color: #16a34a; margin-bottom: 1rem;"></i>
 
-                    <!-- Back and Delete buttons -->
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ path('app_templatebackoffice', { 'page': 'shop-management' })  }}" class="btn btn-secondary shadow-sm">Back to List</a>
-                        {{ include('category/_delete_form.html.twig', { 'button_class': 'btn btn-danger shadow-sm' }) }}
-                    </div>
-                </div>
+        <div style="background: linear-gradient(white, #f0fdf4); border: 2px solid transparent; border-radius: 1rem; padding: 2rem; width: 100%; max-width: 36rem; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); background: linear-gradient(white, #f0fdf4) padding-box, linear-gradient(45deg, #16a34a, #4ade80) border-box;">
+            {{ form_start(form, {'attr': {'style': 'display: flex; flex-direction: column; gap: 1.5rem;'}}) }}
+            <div style="margin-bottom: 1.5rem;">
+                {{ form_label(form.name, 'Category Name', {'label_attr': {'style': 'display: block; font-size: 0.875rem; font-weight: 600; color: #1f2937; margin-bottom: 0.25rem;'}}) }}
+                {{ form_widget(form.name, {'attr': {'style': 'width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); font-size: 0.875rem; transition: border-color 0.2s;'}}) }}
+                {{ form_errors(form.name, {'attr': {'style': 'color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem;'}}) }}
+                <style>
+                    input[name="category[name]"]:focus { border-color: #16a34a; outline: none; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2); }
+                </style>
             </div>
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                <button type="submit"
+                        style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; border: none; font-size: 0.875rem; font-weight: 500; color: white; background-color: #16a34a; border-radius: 0.375rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); transition: background-color 0.2s, transform 0.2s; cursor: pointer;">
+                    <i class="fas fa-save" style="margin-right: 0.5rem;"></i> Save Changes
+                </button>
+                <a href="{{ path('admin_category_annonce') }}"
+                   style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; border: 1px solid #16a34a; font-size: 0.875rem; font-weight: 500; color: #16a34a; background-color: #f0fdf4; border-radius: 0.375rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); text-decoration: none; transition: background-color 0.2s, transform 0.2s;">
+                    <i class="fas fa-times" style="margin-right: 0.5rem;"></i> Cancel
+                </a>
+                <style>
+                    button[type="submit"]:hover { background-color: #15803d; transform: translateY(-2px); }
+                    a[href="{{ path('admin_category_annonce') }}"]:hover { background-color: #dcfce7; transform: translateY(-2px); }
+                </style>
+            </div>
+            {{ form_end(form) }}
         </div>
     </div>
-</div>
-
-<style>
-    /* Button Hover Effects */
-    .btn:hover {
-        transform: scale(1.05);
-        transition: transform 0.3s ease;
-    }
-
-    /* Card Styling */
-    .card {
-        border-radius: 1rem;
-        border: 1px solid #1D6F42;
-    }
-
-    .card-body {
-        padding: 2rem;
-    }
-
-    .card-header {
-        background-color: #1D6F42;
-    }
-
-    /* Form Input Focus Effects */
-    .form-control:focus {
-        border-color: #1D6F42;
-        box-shadow: 0 0 5px rgba(29, 111, 66, 0.5);
-    }
-
-    .form-control {
-        transition: all 0.3s ease;
-    }
-</style>
 {% endblock %}

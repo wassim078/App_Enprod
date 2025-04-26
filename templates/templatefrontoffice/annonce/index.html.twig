@@ -14,32 +14,52 @@
 {% block active %}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
                 <a class="nav-link" href="/templatefrontoffice">HOME</a>
             </li>
-            <li class="nav-item dropdown {{ 'annonce' in app.request.get('_route') ? 'active' : '' }} active">
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }} active">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                     ANNONCE
                 </a>
-
                 <div class="dropdown-menu">
                     {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
                         <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
                             My Announcements
                         </a>
                     {% endif %}
-                    <a class="dropdown-item active" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
                 </div>
-
             </li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a></li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/forum">FORUM</a></li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">COMMANDES</a></li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a></li>
-
-            {# Cart icon inside collapse #}
-            <li class="nav-item ms-3 me-4 mr-5 position-relative">
-                <a class="nav-link text-white p-0" href="/cart">
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
                     <i class="fa fa-shopping-cart fs-5"></i>
                     <span class="cart-counter">{{ cart_count() }}</span>
                 </a>
@@ -53,14 +73,7 @@
 
 
 {% block body %}
-    {% for flashError in app.flashes('error') %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ flashError }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    {% endfor %}
+
     <section class="shop-section" style="flex: 1; padding: 100px 0 120px;  {# Increased top padding #}
             background-image: url('{{ asset('uploads/annonce_bg.png') }}');
             background-size: cover;
@@ -161,7 +174,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
             background-color: #214b27; {# Match footer background #}
         }
 
@@ -174,11 +186,6 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.05); {# Subtle text depth #}
         }
 
-        .card {
-            border: none;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
 
         .card:hover {
             transform: translateY(-10px) scale(1.02);

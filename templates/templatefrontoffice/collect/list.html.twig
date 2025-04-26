@@ -1,0 +1,306 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+{% block title %}My Collects - LiveCycle{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --light-green: #90ee90;
+            --very-light-green: #f9fff9;
+            --dark-green: #28a745;
+            --darker-green: #218838;
+            --yellow: #ffc107;
+            --dark-yellow: #e0a800;
+            --red: #dc3545;
+            --dark-red: #c82333;
+            --gray: #6c757d;
+            --dark-gray: #5a6268;
+            --background: #f4f7fa;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+
+        .collects-container {
+            padding: 60px 0;
+            min-height: 100vh;
+        }
+
+        .collects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .collects-header h1 {
+            color: var(--dark-green);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .create-btn {
+            background: linear-gradient(90deg, var(--dark-green), #34d058);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .collect-card {
+            background: var(--very-light-green);
+            border: 2px solid var(--light-green);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collect-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .collect-card h5 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .collect-card p {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .collect-card strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .category-badge {
+            background-color: var(--yellow);
+            color: #212529;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: var(--very-light-green);
+            border: 2px solid var(--light-green);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: var(--light-green);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+        }
+
+        .btn-edit {
+            background-color: var(--yellow);
+            color: #212529;
+            border: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-edit:hover {
+            background-color: var(--dark-yellow);
+            box-shadow: 0 2px 8px rgba(224, 168, 0, 0.3);
+        }
+
+        .btn-delete {
+            background-color: var(--red);
+            color: #ffffff;
+            border: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: var(--dark-red);
+            box-shadow: 0 2px 8px rgba(200, 35, 51, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .collects-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .create-btn {
+                width: 100%;
+            }
+
+            .collect-card {
+                padding: 1rem;
+            }
+
+            .collect-card p {
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }} active">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="collects-container">
+        <div class="container">
+            <div class="collects-header">
+                <h1>My Collects</h1>
+                <a href="{{ path('collect_create') }}" class="btn create-btn">
+                    <i class="fa fa-plus me-2"></i>Create New Collect
+                </a>
+            </div>
+
+            {% if collects|length == 0 %}
+                <div class="empty-state">
+                    <i class="fa fa-box-open"></i>
+                    <h3>No Collects Found</h3>
+                    <p>You haven't created any collects yet. Start by adding a new one!</p>
+
+                </div>
+            {% else %}
+                <div class="row">
+                    {% for collect in collects %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="collect-card">
+                                <h5>{{ collect.titre }}</h5>
+                                <p><strong>Product:</strong> {{ collect.nomProduit }}</p>
+                                <p><strong>Category:</strong> <span class="category-badge">{{ collect.categorieCollect.nom }}</span></p>
+                                <p><strong>Quantity:</strong> {{ collect.quantite }}</p>
+                                <p><strong>Location:</strong> {{ collect.lieu }}</p>
+                                <p><strong>Start Date:</strong> {{ collect.dateDebut|date('d M Y') }}</p>
+                                <div class="button-group mt-3">
+                                    <a href="{{ path('collect_edit', {'id': collect.id}) }}" class="btn btn-edit action-btn">
+                                        <i class="fa fa-pencil me-1"></i> Edit
+                                    </a>
+                                    <form method="post" action="{{ path('collect_delete', {'id': collect.id}) }}" onsubmit="return confirm('Are you sure you want to delete this collect?')">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ collect.id) }}">
+                                        <button type="submit" class="btn btn-delete action-btn">
+                                            <i class="fa fa-trash me-1"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <i class="fa fa-box-open"></i>
+                                <h3>No Collects Found</h3>
+                                <p>No collects available at the moment.</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

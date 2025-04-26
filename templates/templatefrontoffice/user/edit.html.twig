@@ -5,7 +5,7 @@
 {% block active %}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? 'active' : '' }}">
                 <a class="nav-link" href="/templatefrontoffice">HOME</a>
             </li>
             <li class="nav-item dropdown {{ 'annonce' in app.request.get('_route') ? 'active' : '' }}">
@@ -21,14 +21,41 @@
                     <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
                 </div>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/collect">COLLECT</a></li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/forum">FORUM</a></li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">COMMANDES</a></li>
-            <li class="nav-item"><a class="nav-link" href="/templatefrontoffice/reclamation">RECLAMATION</a></li>
+            <li class="nav-item dropdown {{ 'collect' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/templatefrontoffice/collect/my-collects">
+                        My Collects
+                    </a>
+                    <a class="dropdown-item" href="/collect/collects">
+                        Collects
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item {{ 'forum' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item {{ 'commande' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/templatefrontoffice/complaint/my-complaints">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/templatefrontoffice/complaint/create-complaint">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
 
-            {# Cart icon inside collapse #}
-            <li class="nav-item ms-3 me-4 mr-5 position-relative">
-                <a class="nav-link text-white p-0" href="/cart">
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
                     <i class="fa fa-shopping-cart fs-5"></i>
                     <span class="cart-counter">{{ cart_count() }}</span>
                 </a>
@@ -36,7 +63,6 @@
         </ul>
     </div>
 {% endblock %}
-
 
 
 {% block body %}

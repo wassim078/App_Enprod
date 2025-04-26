@@ -26,4 +26,15 @@ class AnnonceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllWithCategoryAndUser(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->addSelect('c', 'u')
+            ->leftJoin('a.categorieAnnonce', 'c')
+            ->leftJoin('a.user', 'u')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

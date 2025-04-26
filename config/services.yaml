@@ -6,6 +6,7 @@
 parameters:
     images_directory: '%kernel.project_dir%/public/frontoffice/images'
     uploads_directory: '%kernel.project_dir%/public/uploads'
+    reclamation_files_directory: '%kernel.project_dir%/public/uploads/reclamations'
 services:
     # default configuration for services in *this* file
     _defaults:
