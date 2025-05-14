@@ -1,0 +1,315 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+{% block title %}Checkout - LiveCycle{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Import modern font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Main Container with subtle gradient */
+        .checkout-container {
+            background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .checkout-container::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+        }
+        .checkout-container::after {
+            content: '';
+            position: absolute;
+            bottom: -120px;
+            right: -120px;
+            width: 350px;
+            height: 350px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+        }
+
+        /* Progress Steps */
+        .checkout-progress {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .checkout-progress .step {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            margin: 0 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .checkout-progress .step.active {
+            background: rgba(59, 130, 246, 0.15);
+        }
+        .checkout-progress .step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .checkout-progress .step.active .step-number {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+        .checkout-progress .step-text {
+            color: #1e40af;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Card Styling */
+        .payment-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Title Styling */
+        .page-title {
+            color: #16a34a;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .form-control, .form-select, textarea {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+        }
+        .form-control:focus, .form-select:focus, textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+            background: #ffffff;
+        }
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Payment Methods */
+        .payment-method-choices {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .payment-method-choices .form-check {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+        .payment-method-choices .form-check:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+        .payment-method-choices .form-check-input {
+            margin-right: 0.75rem;
+        }
+        .payment-method-choices .form-check-label {
+            color: #1e293b;
+            font-weight: 500;
+        }
+        .payment-method-choices .form-check-input:checked ~ .form-check-label {
+            color: #3b82f6;
+        }
+
+        /* Button */
+        .btn-primary {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s ease;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+        }
+
+        /* Alerts and Errors */
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-error {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+    </style>
+{% endblock %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item active">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="checkout-container">
+        <div class="container">
+            <div class="payment-card">
+                <h2 class="page-title">Informations de livraison</h2>
+
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger">
+                        <strong>Veuillez corriger les erreurs :</strong>
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+
+                {{ form_start(form, { attr: { class: 'needs-validation', novalidate: 'novalidate' } }) }}
+
+                <div class="form-group">
+                    {{ form_label(form.client_name, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(form.client_name, { attr: { class: 'form-control' } }) }}
+                    <div class="form-error">{{ form_errors(form.client_name) }}</div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.client_family_name, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(form.client_family_name, { attr: { class: 'form-control' } }) }}
+                    <div class="form-error">{{ form_errors(form.client_family_name) }}</div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.client_adresse, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(form.client_adresse, { attr: { class: 'form-control' } }) }}
+                    <div class="form-error">{{ form_errors(form.client_adresse) }}</div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.client_phone, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(form.client_phone, { attr: { class: 'form-control' } }) }}
+                    <div class="form-error">{{ form_errors(form.client_phone) }}</div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.methode_paiement, 'Méthode de paiement *', { label_attr: { class: 'form-label' } }) }}
+                    <div class="payment-method-choices">
+                        {% for choice in form.methode_paiement %}
+                            <div class="form-check">
+                                {{ form_widget(choice, { attr: { class: 'form-check-input' } }) }}
+                                {{ form_label(choice, null, { label_attr: { class: 'form-check-label' } }) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-error">{{ form_errors(form.methode_paiement) }}</div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.instruction_speciale, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(form.instruction_speciale, { attr: { class: 'form-control' } }) }}
+                    <div class="form-error">{{ form_errors(form.instruction_speciale) }}</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Confirmer la commande – {{ total|format_currency('TND') }}
+                </button>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

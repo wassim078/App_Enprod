@@ -1,0 +1,183 @@
+
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+
+
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }} active">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+{% block body %}
+    <style>
+        .post-card {
+            background: #F0FFF0;
+            border: 2px solid #32CD32;
+            border-radius: 15px;
+            margin: 20px 0;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(50,205,50,0.2);
+        }
+        .back-btn {
+            background: #32CD32;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .float-right {
+            float: right;
+        }
+        .btn-success {
+            background: #32CD32;
+            border-color: #228B22;
+            margin-left: 10px;
+        }
+        .btn-success:hover {
+            background: #228B22;
+        }
+        .fa-plus {
+            margin-right: 5px;
+        }
+
+        .star-rating {
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            display: inline-block;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 25px;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffd700;
+        }
+        .rating-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+
+    <div class="container mt-5">
+        <a href="{{ path('app_forum') }}" class="btn back-btn">
+            ← Back to Categories
+        </a>
+        {% if is_granted('IS_AUTHENTICATED') %}
+            <a href="{{ path('app_forum_new_post', {'id': categorie.id}) }}"
+               class="btn btn-success float-right">
+                <i class="fas"></i> +
+            </a>
+        {% endif %}
+        <h1 class="forum-title">{{ categorie.name }} Posts</h1>
+
+        {% if posts|length > 0 %}
+            <div class="row">
+                {% for post in posts %}
+                    <div class="col-12 mb-4">
+                        <div class="post-card">
+                            <h3>{{ post.title }}</h3>
+                            <p class="text-muted small">
+                                Posted on {{ post.createdAt|date('Y-m-d H:i') }}
+                            </p>
+                            <div class="post-content">
+                                {{ post.contenu|nl2br }}
+                            </div>
+                            <div class="rating-section mt-3">
+                                <form action="{{ path('rate_post', {'id': categorie.id, 'post': post.id}) }}" method="post">
+                                    <div class="star-rating">
+                                        {% for i in 5..1 %}
+                                            <input type="radio"
+                                                   id="star{{ i }}-{{ post.id }}"
+                                                   name="rating[rating]"
+                                                   value="{{ i }}"
+                                                    {{ (user_ratings[post.id] is defined and user_ratings[post.id] == i) ? 'checked' : '' }}>
+                                            <label for="star{{ i }}-{{ post.id }}" class="star">★</label>
+                                        {% endfor %}
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-success mt-2">Submit Rating</button>
+                                </form>
+                                <div class="rating-info">
+                                    Average: {{ post.averageRating ?? 0|number_format(1) }} {# Fixed here #}
+                                    ({{ post.ratings|length }} ratings)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No posts found in this category
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

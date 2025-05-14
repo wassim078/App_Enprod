@@ -1,0 +1,138 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+{% block title %}All Forums{% endblock %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }} active">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            background-color: #c1d6c4; /* Light green-gray background */
+        }
+        .forum-card {
+            width: 70%; /* Narrower card width */
+            margin: 0 auto;
+            border-radius: 35px; /* More pronounced rounded corners */
+            border: 2px solid #32CD32; /* Vibrant green border */
+            background-color: #F0FFF0; /* Light green background */
+            box-shadow: 0 6px 12px rgba(0, 255, 0, 0.3); /* Enhanced green glow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .forum-card:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+            box-shadow: 0 12px 24px rgba(0, 255, 0, 0.4); /* Stronger glow */
+        }
+        .forum-card .card-header {
+            background: linear-gradient(135deg, #32CD32, #228B22); /* Green gradient */
+            color: white;
+            text-align: center;
+            border-radius: 35px 35px 0 0; /* Rounded top corners */
+            padding: 15px;
+        }
+        .forum-card .card-header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.5rem; /* Larger title */
+        }
+        .forum-card .card-body {
+            text-align: center;
+            padding: 20px;
+        }
+        .forum-card .card-text {
+            color: #333;
+            font-size: 1rem;
+        }
+        .forum-icon {
+            color: white;
+            margin-right: 10px;
+        }
+        .forum-title {
+            margin-bottom: 8rem; /* Significantly increased margin-bottom */
+            text-align: center;
+        }
+    </style>
+
+    <div class="container mt-5 pb-5" style="min-height: 100vh;">
+        <h1 class="forum-title">Forum Categories</h1>
+        <div class="row">
+            {% for categorie in categories %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 forum-card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas forum-icon"></i>
+                                <a href="{{ path('app_forum_posts', {'id': categorie.id}) }}" class="stretched-link">
+                                    {{ categorie.name }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ categorie.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">No categories found</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

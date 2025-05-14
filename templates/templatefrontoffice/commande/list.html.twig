@@ -1,0 +1,184 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+{% block title %}Mes Commandes - LiveCycle{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .commandes-container {
+            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+            min-height: 100vh;
+            padding: 60px 0;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .status-paid {
+            background-color: #16a34a20;
+            color: #16a34a;
+        }
+
+        .status-awaiting {
+            background-color: #f59e0b20;
+            color: #f59e0b;
+        }
+
+        .list-group-item {
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        @media (max-width: 768px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .card-header div {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }} active">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="commandes-container">
+        <div class="container">
+            <h1 class="mb-5" style="color: #16a34a; font-weight: 700;">Mes Commandes</h1>
+
+            {% if commandes|length == 0 %}
+                <div class="alert alert-info text-center" role="alert">
+                    <i class="fa fa-shopping-cart fa-3x mb-3" style="color: #353131;"></i>
+                    <h4 class="alert-heading">Aucune commande trouvée</h4>
+                    <p>Vous n'avez pas encore passé de commandes.</p>
+                    <hr>
+                    <p class="mb-0">
+                        <a href="{{ path('app_shop') }}" class="btn btn-success">Explorer la boutique</a>
+                    </p>
+                </div>
+            {% else %}
+                {% for commande in commandes %}
+                    <div class="card mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">Commande du {{ commande.date|date('d/m/Y à H:i') }}</h5>
+                                <small class="text-muted">Référence: #{{ commande.id|slice(0, 8) }}</small>
+                            </div>
+                            <div>
+                                <span class="badge {% if commande.etatCommande == 'PAID' %}status-paid{% else %}status-awaiting{% endif %}">
+                                    <i class="fa fa-{% if commande.etatCommande == 'PAID' %}check-circle{% else %}clock-o{% endif %} me-1"></i>
+                                    {{ commande.etatCommande|replace({
+                                        'PAID': 'PAID',
+                                        'AWAITING_DELIVERY': 'AWAITING_DELIVERY'
+                                    }) }}
+                                </span>
+                                <span class="ms-2">{{ commande.prixtotal|format_currency('TND') }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h6>Informations client</h6>
+                                    <ul class="list-unstyled">
+                                        <li>{{ commande.clientName }} {{ commande.clientFamilyName }}</li>
+                                        <li>{{ commande.clientAdresse }}</li>
+                                        <li>{{ commande.clientPhone }}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Détails de paiement</h6>
+                                    <ul class="list-unstyled">
+                                        <li>Méthode: {{ commande.methodePaiement|replace({
+                                                'E-paiement': 'Paiement en ligne',
+                                                'à la livraison': 'Paiement à la livraison'
+                                            }) }}</li>
+                                        <li>Total: {{ commande.prixtotal|format_currency('TND') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <h6>Articles commandés</h6>
+                            <div class="list-group">
+                                {% for annonce in annoncesDetails[commande.id] %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ annonce.title }}
+                                        <span class="badge bg-primary rounded-pill">{{ annonce.quantity }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if commande.instructionSpeciale %}
+                                <div class="mt-4">
+                                    <h6>Instructions spéciales</h6>
+                                    <p>{{ commande.instructionSpeciale }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

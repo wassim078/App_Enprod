@@ -1,0 +1,282 @@
+{% extends 'templatefrontoffice/base.html.twig' %}
+
+{% block title %}My Complaints{% endblock %}
+
+{% block active %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item{{ app.request.get('_route') == 'home' ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice">HOME</a>
+            </li>
+            <li class="nav-item dropdown{{ 'annonce' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    ANNONCE
+                </a>
+                <div class="dropdown-menu">
+                    {% if app.user and 'ROLE_ENTREPRISE' not in app.user.roles %}
+                        <a class="dropdown-item" href="/templatefrontoffice/annonce/myAnnoncements">
+                            My Announcements
+                        </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="/templatefrontoffice/annonce/">Shop Announcement</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown{{ 'collect' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COLLECT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('collect_list') }}">My Collects</a>
+                    <a class="dropdown-item" href="/collect/collects">Collects</a>
+                </div>
+            </li>
+            <li class="nav-item{{ 'forum' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/templatefrontoffice/forum">FORUM</a>
+            </li>
+            <li class="nav-item{{ 'commande' in app.request.get('_route') ? ' active' : '' }}">
+                <a class="nav-link" href="/commande/mes-commandes">COMMANDES</a>
+            </li>
+            <li class="nav-item dropdown {{ 'complaint' in app.request.get('_route') ? 'active' : '' }} active">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    COMPLAINT
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('complaint_list') }}">
+                        My Complaints
+                    </a>
+                    <a class="dropdown-item" href="/complaint/create">
+                        Create Complaint
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item position-relative cart-item">
+                <a class="nav-link p-0" href="{{ path('cart_view') }}">
+                    <i class="fa fa-shopping-cart fs-5"></i>
+                    <span class="cart-counter">{{ cart_count() }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="text-center mb-5 position-relative">
+            <h1 class="display-4 fw-bold text-dark text-uppercase letter-spacing-1">
+                My Complaints
+                <span class="title-decor"></span>
+            </h1>
+            <div class="d-flex justify-content-end mt-3">
+                <a href="/complaint/create" class="btn btn-green btn-lg rounded-pill px-4 shadow-sm">
+                    <i class="fa fa-plus me-2"></i>Create New Complaint
+                </a>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
+            <div class="card-body p-4">
+                {% if complaints|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-borderless align-middle">
+                            <thead class="bg-light text-dark">
+                            <tr>
+                                <th class="ps-4 rounded-start">Date</th>
+                                <th>Subject</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4 rounded-end">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for complaint in complaints %}
+                                <tr class="animate__animated animate__fadeInUp">
+                                    <td class="ps-4">{{ complaint.date|date('d M Y') }}</td>
+                                    <td class="fw-medium">{{ complaint.sujet }}</td>
+                                    <td>{{ complaint.type }}</td>
+                                    <td>
+                                        <span class="status-pill {{ complaint.etat|lower == 'en attente' ? 'status-yellow' :
+                                        complaint.etat|lower == 'résolue' ? 'status-green' :
+                                        complaint.etat|lower == 'en cours' ? 'status-orange' :
+                                        'status-red' }}">
+                                            {{ complaint.etat }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <form method="post"
+                                                  action="{{ path('complaint_delete', {'id': complaint.id}) }}"
+                                                  onsubmit="return confirm('Are you sure you want to delete this complaint?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ complaint.id) }}">
+                                                <button class="btn btn-outline-danger btn-sm rounded-pill px-3" title="Delete">
+                                                    <i class="fa fa-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-muted fw-semibold">No Complaints Yet</h4>
+                        <p class="text-muted mb-4">It looks like you haven't submitted any complaints. Get started by creating one!</p>
+                        <a href="/complaint/create" class="btn btn-green rounded-pill px-5 py-2 shadow-sm">
+                            Create Your First Complaint
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Modern and Professional Styling */
+        .letter-spacing-1 {
+            letter-spacing: 2px;
+        }
+
+        .title-decor {
+            display: block;
+            width: 60px;
+            height: 6px;
+            background: linear-gradient(90deg, #28a745, #34d058);
+            border-radius: 3px;
+            margin: 10px auto 0;
+            transform: skew(-20deg);
+        }
+
+        .card {
+            transition: all 0.3s ease;
+            border-radius: 1rem !important;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            color: #495057;
+        }
+
+        .table td {
+            vertical-align: middle;
+            color: #343a40;
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .status-yellow {
+            background-color: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+
+        .status-green {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .status-orange {
+            background-color: #fed7aa;
+            color: #c2410c;
+            border-color: #f97316;
+        }
+
+        .status-red {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .btn-green {
+            background: linear-gradient(90deg, #28a745, #34d058);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-green:hover {
+            background: linear-gradient(90deg, #218838, #28a745);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-outline-primary, .btn-outline-danger {
+            border-width: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-primary:hover, .btn-outline-danger:hover {
+            transform: translateY(-1px);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .display-4 {
+                font-size: 2.5rem;
+            }
+            .btn-lg {
+                font-size: 1rem;
+                padding: 0.5rem 1.5rem;
+            }
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            .btn-sm {
+                font-size: 0.8rem;
+                padding: 0.4rem 1rem;
+            }
+            .status-pill {
+                padding: 5px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .display-4 {
+                font-size: 2rem;
+            }
+            .table th, .table td {
+                font-size: 0.85rem;
+            }
+            .btn-sm {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.8rem;
+            }
+            .title-decor {
+                width: 40px;
+                height: 4px;
+            }
+            .status-pill {
+                padding: 4px 10px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+{% endblock %}
