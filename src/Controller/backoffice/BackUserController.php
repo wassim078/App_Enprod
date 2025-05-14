@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\CategorieForumRepository;
 
 
 
@@ -166,6 +167,9 @@ final class BackUserController extends AbstractController{
         
                 return $this->redirectToRoute('admin_user_management', [], Response::HTTP_SEE_OTHER);
             }
+
+
+
 
 
 
