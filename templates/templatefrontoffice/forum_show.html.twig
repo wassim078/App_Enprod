@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Post Index{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    {% if categorie_forum %}
+        <!-- Catégorie du forum -->
+        <h1 class="text-primary text-center">{{ categorie_forum.name }}</h1>
+        <p class="text-muted text-center">{{ categorie_forum.description }}</p>
+
+        <!-- Bouton de création de post -->
+        <div class="text-center my-4">
+            <a href="{{ path('app_post_new', {'id': categorie_forum.id}) }}" class="btn btn-success">Create Post</a>
+        </div>
+
+
+        {% if post_with_most_comments %}
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    Post avec le plus de commentaires
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ post_with_most_comments.title }}</h5>
+                    <p class="card-text">{{ post_with_most_comments.contenu|slice(0, 100) }}...</p>
+                    <small>Posté le {{ post_with_most_comments.createdAt|date('Y-m-d') }} par {{ post_with_most_comments.user.id }}</small>
+                    <p class="mt-2"><strong>Nombre de commentaires : {{ post_with_most_comments.commentaires|length }}</strong></p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Champ de recherche -->
+        <input type="text" id="search" class="form-control" placeholder="Rechercher un post..." autocomplete="off">
+        
+        <!-- Liste des posts -->
+        <h2 class="text-center text-secondary">Posts</h2>
+
+        <div id="post-results">
+            {% if pagination is not empty %}
+                <div class="list-group">
+                    {% for post in pagination %}
+                        <div class="list-group-item">
+                            <h5>{{ post.title }}</h5>
+                            <p>{{ post.contenu|slice(0, 100) }}...</p>
+                            <small>Posté le {{ post.createdAt|date('Y-m-d') }} par {{ post.user.id }}</small>
+
+                            <!-- Affichage de la note -->
+                            <div class="rating" data-post-id="{{ post.id }}" data-user-id="{{ post.user.id }}">
+                                <span class="star" data-value="1">&#9733;</span>
+                                <span class="star" data-value="2">&#9733;</span>
+                                <span class="star" data-value="3">&#9733;</span>
+                                <span class="star" data-value="4">&#9733;</span>
+                                <span class="star" data-value="5">&#9733;</span>
+                            </div>
+                            <p id="average-rating-{{ post.id }}{{ post.user.id }}">Moyenne : {{ moyenne[post.id] }}</p>
+
+                            <!-- Bouton pour afficher le modal de création de commentaire -->
+                            <button type="button" class="btn btn-outline-primary mt-3 open-modal" data-modal="commentModal{{ post.id }}">
+                                + add comment
+                            </button>
+
+                            <!-- Modal Ajouter un Commentaire -->
+                            <!-- Modal Ajouter un Commentaire -->
+<div class="custom-modal" id="commentModal{{ post.id }}">
+    <div class="custom-modal-content">
+        <span class="close-modal" data-modal="commentModal{{ post.id }}">&times;</span>
+        <h5>Add Comment</h5>
+        <form action="{{ path('app_comment_create', {'id': post.id}) }}" method="POST">
+            <div class="mb-3">
+                <label for="content">Comment:</label>
+                <textarea class="form-control" name="content" id="content" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Send</button>
+        </form>
+    </div>
+</div>
+
+                            <!-- Bouton Voir les Commentaires -->
+                            <button type="button" class="btn btn-outline-secondary mt-3 open-modal" data-modal="commentsModal{{ post.id }}">
+                                All Comment
+                            </button>
+
+                            <!-- Modal Voir les Commentaires -->
+                            <div class="custom-modal" id="commentsModal{{ post.id }}">
+                                <div class="custom-modal-content">
+                                    <span class="close-modal" data-modal="commentsModal{{ post.id }}">&times;</span>
+                                    <h5>Comment ({{ post.commentaires|length }})</h5>
+                                    {% if post.commentaires is not empty %}
+                                        <ul class="list-group">
+                                            {% for comment in post.commentaires %}
+                                                <li class="list-group-item">
+                                                    <strong>: {{ comment.content }}
+                                                    <small class="text-muted">{{ comment.createdAt|date('Y-m-d H:i') }}</small>
+                                                    
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="text-muted">Aucun commentaire.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-muted">Aucun post trouvé.</p>
+            {% endif %}
+        </div>
+  <div class="pagination">
+    <ul class="pagination">
+        <!-- Bouton "Previous" -->
+        <li class="page-item {% if pagination.currentPageNumber == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('app_forum_show', {'id': id, 'page': pagination.currentPageNumber - 1}) }}">Previous</a>
+        </li>
+
+        <!-- Liens des pages -->
+        {% for page in 1..pagination.pageCount %}
+            <li class="page-item {% if pagination.currentPageNumber == page %}active{% endif %}">
+                <a class="page-link" href="{{ path('app_forum_show', {'id': id, 'page': page}) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+
+        <!-- Bouton "Next" -->
+        <li class="page-item {% if pagination.currentPageNumber == pagination.pageCount %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('app_forum_show', {'id': id, 'page': pagination.currentPageNumber + 1}) }}">Next</a>
+        </li>
+    </ul>
+</div>
+    {% else %}
+        <p class="text-center text-danger">Forum non trouvé.</p>
+    {% endif %}
+</div>
+
+
+
+{% block styles %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 900px;
+    }
+
+    .list-group-item {
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+        transition: none !important;
+    }
+
+    .rating {
+        display: flex;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+
+    .star {
+        font-size: 1.5em;
+        cursor: pointer;
+        color: #d3d3d3; /* couleur grise pour les étoiles non sélectionnées */
+    }
+
+    .star.selected {
+        color: #f7b500; /* couleur dorée pour les étoiles sélectionnées */
+    }
+
+    .custom-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .custom-modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        text-align: center;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .close-modal {
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .btn, .list-group-item {
+        transition: none !important;
+        animation: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Gestion des modals
+        let openButtons = document.querySelectorAll('.open-modal');
+        let closeButtons = document.querySelectorAll('.close-modal');
+
+        openButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                let modalID = this.getAttribute("data-modal");
+                let modal = document.getElementById(modalID);
+                if (modal) {
+                    setTimeout(() => {
+                        modal.style.display = "block";
+                    }, 10);
+                }
+            });
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                let modalID = this.getAttribute("data-modal");
+                let modal = document.getElementById(modalID);
+                if (modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+
+        // Système de notation
+        let ratings = document.querySelectorAll('.rating');
+        ratings.forEach(rating => {
+            let stars = rating.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener("click", function () {
+                    let postId = rating.getAttribute('data-post-id');
+                    let value = this.getAttribute('data-value');
+                    let userId = rating.getAttribute('data-user-id');
+
+                    // Réinitialiser les étoiles sélectionnées précédemment dans ce groupe
+                    stars.forEach(s => s.classList.remove('selected'));
+
+                    // Ajouter la classe 'selected' pour les étoiles sélectionnées
+                    this.classList.add('selected');
+                    let previousSiblings = this.previousElementSibling;
+                    while (previousSiblings) {
+                        previousSiblings.classList.add('selected');
+                        previousSiblings = previousSiblings.previousElementSibling;
+                    }
+
+                    // Enregistrer la valeur de la note dans un fichier temporaire
+                    fetch('{{ path('app_rate_post') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            postId: postId,
+                            rating: value,
+                            userId: userId // Including user ID in the request
+                        })
+                    }).then(response => response.json()).then(data => {
+                        if (data.success) {
+                            alert('Votre note a été enregistrée!');
+                            // Mettre à jour la moyenne
+                            document.getElementById('average-rating-' + postId + userId).textContent = "Moyenne : " + data.newAverageRating;
+                        }
+                    }).catch(error => {
+                        console.error('Erreur de notation:', error);
+                    });
+                });
+            });
+        });
+
+        // Fermer les modals en cliquant en dehors
+        window.addEventListener("click", function (event) {
+            let modals = document.querySelectorAll(".custom-modal");
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+
+        // Recherche des posts
+        let searchInput = document.getElementById('search');
+        searchInput.addEventListener('input', function () {
+            let query = searchInput.value;
+            fetch("{{ path('app_post_search', {'id': categorie_forum.id}) }}?q=" + encodeURIComponent(query), {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => response.text())  // Assurez-vous que la réponse est en HTML
+            .then(data => {
+                document.getElementById("post-results").innerHTML = data;  // Injecter les résultats dans la page
+            })
+            .catch(error => console.error("Erreur lors de la recherche :", error));
+        });
+    });
+</script>
+       
+{% endblock %}
+{% endblock %}
