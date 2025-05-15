@@ -57,30 +57,32 @@ php bin/console doctrine:migrations:migrate
 
 # Lancer le serveur
 symfony server:start
+```
+## ✨ Fonctionnalités
 
-✨ Fonctionnalités
-🧑💻 Module Utilisateur
+### 👤 Module Utilisateur
+
 🔐 Authentification JWT
 
 📧 Réinitialisation de mot de passe par email
 
 👤 Gestion des profils utilisateurs
 
-📢 Module Annonces
+### 📢 Module Annonces
 🖼️ Publication d'annonces avec photos
 
 🔍 Filtrage par catégories (métal, plastique, verre)
 
 🔔 Notifications SMS/Email (Twilio)
 
-💬 Module Forum
+### 💬 Module Forum
 📝 Création de posts thématiques
 
 💬 Système de commentaires
 
 📥 Export PDF des discussions (DomPDF)
 
-🚛 Module Commandes
+### 🚛 Module Commandes
 💳 Paiement sécurisé (Stripe)
 
 📦 Suivi des livraisons en temps réel
